@@ -147,13 +147,14 @@ Kinetica admite cuatro configuraciones de compresión diferentes que varían en 
   \item Ninguna (predeterminado)
   \item \verb|snappy|: Altas velocidades de compresión y descompresión. 
   \item \verb|lz4|: Alta velocidad de compresión, mayor velocidad de descompresión.
-  \item \verb|lz4hc|: Menores velocidad de compresión y descompresión.
+  \item \verb|lz4hc|: Menores velocidades de compresión y descompresión.
 \end{itemize}
 
 \subsection{Particionamiento}
 {\itshape Nota: ¿Será necesario escribir más al respecto?}
 
-Los datos de una tabla pueden ser sometidos a un particionamiento para obtener mejoras en el rendimiento y en el manejo de los datos. Los esquemas de particionamiento permitidos son:
+Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar el rendimiento y el manejo de datos. Los esquemas de particionamiento permitidos en Kinetica son los siguientes:
+
 \begin{itemize}
   \item Rango
   \item Intervalo
@@ -165,10 +166,11 @@ Los datos de una tabla pueden ser sometidos a un particionamiento para obtener m
 \subsection{Operaciones DML}
 \subsection{Buffer diferencial y el proceso de mezcla}
 \subsection{Reconstrucción de tuplas}
-\subsection{Tipos de joins}
+\subsection{Tipos de {\itshape join}}
 {\itshape Nota: No estoy muy segura de si está bien esto}
 
-Kinética conectar datos relacionados entre dos o más tablas a través de join views. Los tipos de join permitidos son:
+Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. Los tipos de {\itshape join} permitidos son:
+
 \begin{itemize}
   \item INNER
   \item LEFT
@@ -176,7 +178,9 @@ Kinética conectar datos relacionados entre dos o más tablas a través de join 
   \item FULL OUTER
   \item Cross
 \end{itemize}
-Existen dos tipos de ejecución para los joins:
+
+De igual manera, hay dos tipos de ejecución para los {\itshape joins}:
+
 \begin{itemize}
   \item Native joins: Realiza un aislamiento de la operación join y crea una join view nativa de Kinética. 
   \item SQL Joins: Se realiza de manera automática cuando una base de datos recibe una query de SQL con la cláusula JOIN. 
