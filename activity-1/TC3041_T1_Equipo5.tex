@@ -80,17 +80,17 @@
 %% Of note is the shared affiliation of the first two authors, and the
 %% "authornote" and "authornotemark" commands
 %% used to denote shared contribution to the research.
-\author{Daniela Vignau (A01021698)}
+\author{Daniela Vignau}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
   \country{México}}
 
-\author{Cristopher Cejudo (A01021698)}
+\author{Cristopher Cejudo}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
   \country{México}}
 
-\author{Héctor Reyes (A01339607)}
+\author{Héctor Reyes}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
   \country{México}}
@@ -107,7 +107,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  Este reporte busca profundizar en varios aspectos de las bases de datos en memoria, teniendo como foco el sistema de administración de bases de datos {\itshape Kinetica}. También se analiza el rendimiento de la base de datos en cuestión para las operaciones de inserción y consulta.
+  Este reporte busca profundizar en varios aspectos de las bases de datos en memoria, teniendo como foco el sistema de administración de bases de datos (DBMS) Kinetica. También se analiza el rendimiento de la base de datos en cuestión para las operaciones de inserción y consulta.
 \end{abstract}
 
 %%
@@ -116,7 +116,7 @@
 \maketitle
 
 \section{Introducción}
-Kinetica es una base de datos distribuida en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un sistema de administración de bases de datos (DBMS) único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
+Kinetica es una base de datos distribuida en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
 
 Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Por tanto, no es adecuada como sistema de uso transaccional (OLTP). Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o vRAM, en el caso de las GPUs.
 
@@ -129,19 +129,26 @@ Al tratarse de una base de datos orientada a columnas diseñada para el procesam
   \label{fig:Arquitectura del DBMS}
 \end{figure}
 
-Kinética cuenta con una arquitectura distribuida diseñada así para el procesamiento de datos a escala. Un clúster, compuesto por nodos idénticos, es capaz de correr en hardware básico así como también en aquellos equipados con una unidad de procesamiento de gráficos (GPU, por su siglas en inglés). Uno de esos nodos, es seleccionado para ser el nodo de agregación principal. En la figura \ref{fig:Arquitectura del DBMS} se muestra un diagrama sobre ella.
-
+Kinetica cuenta con una arquitectura distribuida diseñada así para el procesamiento de datos a escala. Un clúster de Kinetica, conformado por nodos idénticos, es capaz de ejecutarse en hardware básico, así como en aquellos equipados con GPU. Uno de esos nodos es seleccionado para ser el nodo de agregación principal. En la Fig. \ref{fig:Arquitectura del DBMS} se muestra un diagrama de la arquitectura de Kinetica.
 
 \subsection{Tipo de almacenamiento utilizado}
-La interfaz API nativa al sistema para el almacenamiento de datos, es de tipo objetos, con cada uno de estos siendo una fila en la tabla.
+La interfaz API nativa a Kinetica para el almacenamiento de datos es de tipo objeto; cada uno de ellos es una fila en la tabla.
 
 \subsection{Representación en memoria}
-Dado que el tipo de almacenamiento es por columnas, la representación en memoria es de la secuencial, todos los datos de una columna están después del otro, e inmediatamente después de terminar dicha columna, comienza la siguiente.
+Dado que el tipo de almacenamiento utilizado por Kinetica es por columnas, la representación en memoria es secuencial. Así, cada registro de una columna va después del otro, e inmediatamente después de terminar esa columna, comienza la siguiente.
 
 \subsection{Mecanismos de compresión}
-{\itshape Nota: No estoy muy segura de si está bien esto}
 
-La compresión puede ser aplicada a una columna de una tabla. Por default, la columna es almacenada sin compresión y una vez que se comprime, se mantiene en ese estado hasta que es usada. Cuando los datos son recuperados, se realiza una copia temporal de los datos descomprimidos y se descarta una vez que se deje de utilizar. Los mecanismos de compresión disponibles en Kinética no están claramente especificados en la documentación, por lo que se puede llegar asumir que se permite cualquier algoritmo.
+Es posible aplicar diferentes mecanismos de compresión a las columnas de las tablas de Kinetica. De manera predeterminada, las columnas son almacenadas sin compresión. En el caso de que se compriman, permanecen en ese estado hasta que son utilizadas. Cuando se recuperan los datos, se realiza una copia temporal de los datos descomprimidos, la cual es descartada una vez que ya no se utiliza.
+
+Kinetica admite cuatro configuraciones de compresión diferentes que varían en velocidad:
+
+\begin{itemize}
+  \item Ninguna (predeterminado)
+  \item \verb|snappy|: Altas velocidades de compresión y descompresión. 
+  \item \verb|lz4|: Alta velocidad de compresión, mayor velocidad de descompresión.
+  \item \verb|lz4hc|: Menores velocidad de compresión y descompresión.
+\end{itemize}
 
 \subsection{Particionamiento}
 {\itshape Nota: ¿Será necesario escribir más al respecto?}
