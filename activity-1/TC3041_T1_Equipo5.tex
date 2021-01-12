@@ -1,6 +1,7 @@
 \documentclass[acmsmall]{acmart}
 
 \usepackage{graphicx}  % for images
+\usepackage{listings}
 
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
@@ -79,15 +80,68 @@ Kinetica admite cuatro configuraciones de compresión diferentes que varían en 
 Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar el rendimiento y el manejo de datos. Los esquemas de particionamiento permitidos en Kinetica son los siguientes:
 
 \begin{itemize}
-  \item Rango: Las {\itshape particiones por rango} de datos está definido a partir de un rango donde todos los registros con una {\itshape llave de partición} de ese rango, son asignados a esa {\itshape partición}.
-  \item Intervalo: Las {\itshape particiones por intervalo} estan definidas como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya {\itshape llave de partición} están dentro del intervalo, o en el rango inferior, son asignados a esa {\itshape partición}.
-  \item Lista: Las {\itshape particiones por lista} pueden ser manuales o automáticas, donde, de manera general, cuando los registros cuyos valores de la {\itshape llave de partición} estén dentro de la lista prefinida, son añadidos a la {\itshape partición}.
-  \item Hash: Las {\itshape particiones por hash} están definidas a través de un número exacto de particiones, donde cada uno de los registros es asignado a una {\itshape partición} basándose en el hash de la {\itshape llave de partición}.
-  \item Series: El{\itshape particionamiento por serie}, segmenta los datos en una secuencia de {\itshape particiones} alocadas de manera dinámica.
+  \item Rango: Las {\itshape particiones por rango} de datos se definen a partir de un rango donde todos los registros con una {\itshape llave de partición} de ese rango son asignados a esa {\itshape partición}.
+  \item Intervalo: Las {\itshape particiones por intervalo} se definen como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya {\itshape llave de partición} está dentro del intervalo, o en el rango inferior, son asignados a esa {\itshape partición}.
+  \item Lista: Las {\itshape particiones por lista} pueden ser manuales o automáticas, donde, en general, cuando los registros cuyos valores de la {\itshape llave de partición} estén dentro de la lista prefinida, son asignados a esa {\itshape partición}.
+  \item Hash: Las {\itshape particiones por hash} se definen por un número exacto de particiones, donde cada uno de los registros es asignado a una {\itshape partición} basado en el hash de la {\itshape llave de partición}.
+  \item Series: El{\itshape particionamiento por serie} segmenta los datos en una secuencia de {\itshape particiones} alocadas de manera dinámica.
 \end{itemize}
 
 \subsection{Operaciones DML}
-\subsection{Buffer diferencial y el proceso de mezcla}
+En lo que respecta a la inserción de datos (INSERT), Kinetica admite dos tipos de formato:
+
+\begin{itemize}
+  \item \verb|INSERT INTO...VALUES|: Se utiliza para insertar registros con valores literales en una tabla.
+  \begin{lstlisting}
+    INSERT INTO example.employee (
+      id,
+      dept_id,
+      manager_id,
+      first_name,
+      last_name,
+      sal,
+      hire_date)
+    VALUES
+        (1, 1, null, 'Anne', 'Arbor', 200000, '2000-01-01')
+  \end{lstlisting}
+  \item \verb|INSERT INTO...SELECT|: Se utiliza para insertar registros de una tabla existente.
+  \begin{lstlisting}
+    INSERT INTO example.employee (
+      id,
+      dept_id,
+      manager_id,
+      first_name,
+      last_name,
+      sal)
+    SELECT id, dept_id, manager_id, first_name, last_name, sal
+    FROM example.employee
+    WHERE hire_date >= '2000-01-01'
+  \end{lstlisting}
+\end{itemize}
+
+De forma predeterminada, Kinetica descartará cualquier registro a insertar cuya llave primaria coincida con la de un registro existente.
+
+Por otro lado, la operación de actualización (UPDATE) permite asignar un nuevo valor constante a una columna mediante el formato \verb|UPDATE...SET...WHERE|.
+
+\begin{lstlisting}
+  UPDATE example.employee
+  SET
+    sal = sal * 1.10,
+    manager_id = 3
+  WHERE id = 5
+\end{lstlisting}
+
+Finalmente, la operación de eliminación (DELETE) permite eliminar registros de una tabla mediante el formato \verb|DELETE FROM...WHERE|.
+
+\begin{lstlisting}
+  DELETE
+  FROM example.employee
+  WHERE id = 6
+\end{lstlisting}
+
+\subsection{Buffer diferencial y proceso de mezcla}
+
+
 \subsection{Reconstrucción de tuplas}
 \subsection{Tipos de {\itshape join}}
 
