@@ -49,7 +49,7 @@ Al tratarse de una base de datos orientada a columnas diseñada para el procesam
 
 \subsection{Arquitectura del DBMS}
 \begin{figure}[ht]
-  \includegraphics[width=50mm, scale=0.5]{./images/dbms-architecture.jpg}
+temp  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
   \caption{Arquitectura del DBMS}
   \label{fig:Arquitectura del DBMS}
 \end{figure}
@@ -76,52 +76,54 @@ Kinetica admite cuatro configuraciones de compresión diferentes que varían en 
 \end{itemize}
 
 \subsection{Particionamiento}
-{\itshape Nota: ¿Será necesario escribir más al respecto?}
-
 Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar el rendimiento y el manejo de datos. Los esquemas de particionamiento permitidos en Kinetica son los siguientes:
 
 \begin{itemize}
-  \item Rango
-  \item Intervalo
-  \item Lista
-  \item Hash
-  \item Series
+  \item Rango: Las {\itshape particiones por rango} de datos está definido a partir de un rango donde todos los registros con una {\itshape llave de partición} de ese rango, son asignados a esa {\itshape partición}.
+  \item Intervalo: Las {\itshape particiones por intervalo} estan definidas como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya {\itshape llave de partición} están dentro del intervalo, o en el rango inferior, son asignados a esa {\itshape partición}.
+  \item Lista: Las {\itshape particiones por lista} pueden ser manuales o automáticas, donde, de manera general, cuando los registros cuyos valores de la {\itshape llave de partición} estén dentro de la lista prefinida, son añadidos a la {\itshape partición}.
+  \item Hash: Las {\itshape particiones por hash} están definidas a través de un número exacto de particiones, donde cada uno de los registros es asignado a una {\itshape partición} basándose en el hash de la {\itshape llave de partición}.
+  \item Series: El{\itshape particionamiento por serie}, segmenta los datos en una secuencia de {\itshape particiones} alocadas de manera dinámica.
 \end{itemize}
 
 \subsection{Operaciones DML}
 \subsection{Buffer diferencial y el proceso de mezcla}
 \subsection{Reconstrucción de tuplas}
 \subsection{Tipos de {\itshape join}}
-{\itshape Nota: No estoy muy segura de si está bien esto}
 
 Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. Los tipos de {\itshape join} permitidos son:
 
 \begin{itemize}
-  \item INNER
-  \item LEFT
-  \item RIGHT
-  \item FULL OUTER
-  \item Cross
+  \item INNER: Regresa los registros que coinciden entre dos tablas.
+  \item LEFT:  Regresa los registros que coinciden entre dos tablas, así como también los registros de la {\itshape tabla izquierda} cuyos registros no coinciden con la tabla derecha.
+  \item RIGHT: Regresa los registros que coinciden entre dos tablas, así como también los registros de la {\itshape tabla derecha} cuyos registros no coinciden con la tabla izquierda.
+  \item FULL OUTER: Regresa los registros que coinciden entre dos tablas, así como aquellos que no tienen ninguna relación con la otra tabla.
+  \item Cross: Regresa todos los registros de una tabla junto con su correspondiente registro de la otra tabla.
 \end{itemize}
 
 De igual manera, hay dos tipos de ejecución para los {\itshape joins}:
 
 \begin{itemize}
-  \item Native joins: Realiza un aislamiento de la operación join y crea una join view nativa de Kinética. 
-  \item SQL Joins: Se realiza de manera automática cuando una base de datos recibe una query de SQL con la cláusula JOIN. 
+  \item {\itshape Native joins}: Realiza un aislamiento de la operación {\itshape join} y crea un {\itshape join view} nativo de Kinetica. 
+  \item SQL {\itshape Joins}: Se realiza de manera automática cuando una base de datos recibe una query de SQL con la cláusula \verb|JOIN|. 
 \end{itemize}
 
-\subsection{Logging/Recovery}
-Kinética cuenta con un registro el cual almacena información como: las interacciones de la base de datos, startup/shutdown, información de errores y más. Este registro puede ser configurado para que se almacene otra información que no está por default.
+Dependiendo del tipo de {\itshape join} utilizado, la memoria tiene un cierto impacto negativo. Kinetica constatemente busca la manera de crear el {\itshape join} más eficiente posible. 
 
-\subsection{Respaldos}
-{\itshape Nota: No está completo pero YO me encargo de terminarlo}
+\subsection{Logging}
+Kinetica cuenta con un registro el cual almacena información como: las interacciones de la base de datos, {\itshape startup/shutdown}, información de errores y más. Este registro puede ser configurado para que se almacene otra información que no está por default.
 
-Existe una herramienta para la administración, configuración e instalación de Kinética llamada KAgent, la cual también permite simplificar el proceso de respaldo y 
+\subsection{Respaldos y {\itshape Recovery}}
+
+Existe una herramienta para la administración, configuración e instalación de Kinetica llamada {\itshape KAgent}, la cual también permite simplificar el proceso de respaldo y {\itshape recovery} de una base de datos en Kinetica. 
+
+Todos los datos dentro de la base de datos pueden ser respaldados de manera automática (es decir, siguiendo una agenda preestablecida), o bien cuando el usuario así lo requiera. Los respaldos son almacenados de manera local para cada uno de los nodos dentro del cluster.
 
 \subsection{Manejo de transacciones}
 \subsection{Cold/hot store}
 \subsection{Manejo de datos históricos}
+
+% Pendiente
 
 \end{document}
 \endinput
