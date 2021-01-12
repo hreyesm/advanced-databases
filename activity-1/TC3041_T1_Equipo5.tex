@@ -1,6 +1,6 @@
 \documentclass[acmsmall]{acmart}
 
-\usepackage{graphicx}  % for images
+\usepackage{graphicx}
 \usepackage{listings}
 
 \AtBeginDocument{%
@@ -18,7 +18,7 @@
 
 \title{Actividad 1. Bases de datos en memoria}
 
-\author{Daniela Vignau León}
+\author{Daniela Vignau}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
   \country{México}}
@@ -36,13 +36,14 @@
 \renewcommand{\shortauthors}{Daniela Vignau, Cristopher Cejudo, Héctor Reyes}
 
 \begin{abstract}
-  Este reporte busca profundizar en varios aspectos de las bases de datos en memoria, teniendo como foco el sistema de administración de bases de datos (DBMS) Kinetica. También se analiza el rendimiento de la base de datos en cuestión para las operaciones de inserción y consulta.
+  Este reporte busca profundizar en varios aspectos de las bases de datos en memoria, teniendo como foco el sistema de administración de bases de datos (DBMS) {\itshape Kinetica}. También se analiza el rendimiento de la base de datos en cuestión para las operaciones de inserción y consulta.
 \end{abstract}
 
 \maketitle
 
 \section{Introducción}
-Kinetica es una base de datos distribuida en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
+
+{\itshape Kinetica} es una base de datos distribuida en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
 
 Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Por tanto, no es adecuada como sistema de uso transaccional (OLTP). Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o vRAM, en el caso de las GPUs.
 
@@ -50,7 +51,7 @@ Al tratarse de una base de datos orientada a columnas diseñada para el procesam
 
 \subsection{Arquitectura del DBMS}
 \begin{figure}[ht]
-temp  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
+  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
   \caption{Arquitectura del DBMS}
   \label{fig:Arquitectura del DBMS}
 \end{figure}
@@ -58,37 +59,43 @@ temp  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
 Kinetica cuenta con una arquitectura distribuida diseñada así para el procesamiento de datos a escala. Un clúster de Kinetica, conformado por nodos idénticos, es capaz de ejecutarse en hardware básico, así como en aquellos equipados con GPU. Uno de esos nodos es seleccionado para ser el nodo de agregación principal. En la Fig. \ref{fig:Arquitectura del DBMS} se muestra un diagrama de la arquitectura de Kinetica.
 
 \subsection{Tipo de almacenamiento utilizado}
+
 La interfaz API nativa a Kinetica para el almacenamiento de datos es de tipo objeto; cada uno de ellos es una fila en la tabla.
 
 \subsection{Representación en memoria}
-Dado que el tipo de almacenamiento utilizado por Kinetica es por columnas, la representación en memoria es secuencial. Así, cada registro de una columna va después del otro, e inmediatamente después de terminar esa columna, comienza la siguiente.
+
+Dado que el tipo de almacenamiento utilizado por Kinetica es orientado a columnas, la representación en memoria es secuencial. Así, cada registro de una columna va después del otro, e inmediatamente después de terminar esa columna, comienza la siguiente.
 
 \subsection{Mecanismos de compresión}
 
 Es posible aplicar diferentes mecanismos de compresión a las columnas de las tablas de Kinetica. De manera predeterminada, las columnas son almacenadas sin compresión. En el caso de que se compriman, permanecen en ese estado hasta que son utilizadas. Cuando se recuperan los datos, se realiza una copia temporal de los datos descomprimidos, la cual es descartada una vez que ya no se utiliza.
 
-Kinetica admite cuatro configuraciones de compresión diferentes que varían en velocidad:
+Kinetica admite cuatro configuraciones de compresión diferentes que varían según su velocidad:
 
 \begin{itemize}
   \item Ninguna (predeterminado)
-  \item \verb|snappy|: Altas velocidades de compresión y descompresión. 
-  \item \verb|lz4|: Alta velocidad de compresión, mayor velocidad de descompresión.
-  \item \verb|lz4hc|: Menores velocidades de compresión y descompresión.
+  \item \verb|snappy|: Altas velocidades de compresión y descompresión
+  \item \verb|lz4|: Alta velocidad de compresión, mayor velocidad de descompresión
+  \item \verb|lz4hc|: Menores velocidades de compresión y descompresión
 \end{itemize}
 
 \subsection{Particionamiento}
+
 Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar el rendimiento y el manejo de datos. Los esquemas de particionamiento permitidos en Kinetica son los siguientes:
 
 \begin{itemize}
-  \item Rango: Las {\itshape particiones por rango} de datos se definen a partir de un rango donde todos los registros con una {\itshape llave de partición} de ese rango son asignados a esa {\itshape partición}.
-  \item Intervalo: Las {\itshape particiones por intervalo} se definen como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya {\itshape llave de partición} está dentro del intervalo, o en el rango inferior, son asignados a esa {\itshape partición}.
-  \item Lista: Las {\itshape particiones por lista} pueden ser manuales o automáticas, donde, en general, cuando los registros cuyos valores de la {\itshape llave de partición} estén dentro de la lista prefinida, son asignados a esa {\itshape partición}.
-  \item Hash: Las {\itshape particiones por hash} se definen por un número exacto de particiones, donde cada uno de los registros es asignado a una {\itshape partición} basado en el hash de la {\itshape llave de partición}.
-  \item Series: El{\itshape particionamiento por serie} segmenta los datos en una secuencia de {\itshape particiones} alocadas de manera dinámica.
+  \item {\itshape Rango:} Las particiones por rango de datos se definen a partir de un rango donde todos los registros con una llave de partición de ese rango son asignados a esa partición.
+  \item {\itshape Intervalo:} Las particiones por intervalo se definen como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya llave de partición está dentro del intervalo, o en el rango inferior, son asignados a esa partición.
+  \item {\itshape Lista:} Las particiones por lista pueden ser manuales o automáticas, donde, en general, cuando los registros cuyos valores de la llave de partición estén dentro de la lista prefinida, son asignados a esa partición.
+  \item {\itshape Hash:} Las particiones por hash se definen por un número exacto de particiones, donde cada uno de los registros es asignado a una partición basado en el hash de la llave de partición.
+  \item {\itshape Series:} El particionamiento por serie segmenta los datos en una secuencia de particiones alocadas de manera dinámica.
 \end{itemize}
 
 \subsection{Operaciones DML}
-En lo que respecta a la inserción de datos (INSERT), Kinetica admite dos tipos de formato:
+
+\subsubsection{Operación de inserción}
+
+En lo que respecta a la operación \verb|INSERT|, Kinetica admite dos tipos de formato:
 
 \begin{itemize}
   \item \verb|INSERT INTO...VALUES|: Se utiliza para insertar registros con valores literales en una tabla.
@@ -121,7 +128,9 @@ En lo que respecta a la inserción de datos (INSERT), Kinetica admite dos tipos 
 
 De forma predeterminada, Kinetica descartará cualquier registro a insertar cuya llave primaria coincida con la de un registro existente.
 
-Por otro lado, la operación de actualización (UPDATE) permite asignar un nuevo valor constante a una columna mediante el formato \verb|UPDATE...SET...WHERE|.
+\subsubsection{Operación de actualización}
+
+Por otro lado, la operación \verb|UPDATE| permite asignar un nuevo valor constante a una columna mediante el formato \verb|UPDATE...SET...WHERE|.
 
 \begin{lstlisting}
   UPDATE example.employee
@@ -131,7 +140,9 @@ Por otro lado, la operación de actualización (UPDATE) permite asignar un nuevo
   WHERE id = 5
 \end{lstlisting}
 
-Finalmente, la operación de eliminación (DELETE) permite eliminar registros de una tabla mediante el formato \verb|DELETE FROM...WHERE|.
+\subsubsection{Operación de eliminación}
+
+Finalmente, la operación \verb|DELETE| permite eliminar registros de una tabla mediante el formato \verb|DELETE FROM...WHERE|.
 
 \begin{lstlisting}
   DELETE
@@ -141,43 +152,52 @@ Finalmente, la operación de eliminación (DELETE) permite eliminar registros de
 
 \subsection{Buffer diferencial y proceso de mezcla}
 
+No se encontró información sobre la implementación del buffer diferencial y el proceso de mezcla en Kinetica.
 
 \subsection{Reconstrucción de tuplas}
+
+No se encontró información sobre el proceso de reconstrucción de tuplas en Kinetica.
+
 \subsection{Tipos de {\itshape join}}
 
-Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. Los tipos de {\itshape join} permitidos son:
+Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. Los tipos de {\itshape join} permitidos se enlistan a continuación:
 
 \begin{itemize}
-  \item INNER: Regresa los registros que coinciden entre dos tablas.
-  \item LEFT:  Regresa los registros que coinciden entre dos tablas, así como también los registros de la {\itshape tabla izquierda} cuyos registros no coinciden con la tabla derecha.
-  \item RIGHT: Regresa los registros que coinciden entre dos tablas, así como también los registros de la {\itshape tabla derecha} cuyos registros no coinciden con la tabla izquierda.
-  \item FULL OUTER: Regresa los registros que coinciden entre dos tablas, así como aquellos que no tienen ninguna relación con la otra tabla.
-  \item Cross: Regresa todos los registros de una tabla junto con su correspondiente registro de la otra tabla.
+  \item {\itshape Inner:} Regresa los registros que coinciden entre dos tablas.
+  \item {\itshape Left:}  Regresa los registros que coinciden entre dos tablas, así como los registros de la tabla izquierda cuyos registros no coinciden con la tabla derecha.
+  \item {\itshape Right:} Regresa los registros que coinciden entre dos tablas, así como los registros de la tabla derecha cuyos registros no coinciden con la tabla izquierda.
+  \item {\itshape Full outer:} Regresa los registros que coinciden entre dos tablas, así como los que no tienen relación con la otra tabla.
+  \item {\itshape Cross:} Regresa todos los registros de una tabla junto con su registro correspondiente de la otra tabla.
 \end{itemize}
 
-De igual manera, hay dos tipos de ejecución para los {\itshape joins}:
+Asimismo, hay dos tipos de ejecución para los {\itshape joins}:
 
 \begin{itemize}
-  \item {\itshape Native joins}: Realiza un aislamiento de la operación {\itshape join} y crea un {\itshape join view} nativo de Kinetica. 
-  \item SQL {\itshape Joins}: Se realiza de manera automática cuando una base de datos recibe una query de SQL con la cláusula \verb|JOIN|. 
+  \item {\itshape Native joins:} Realiza un aislamiento de la operación {\itshape join} y crea un {\itshape join view} nativo a Kinetica. 
+  \item {\itshape SQL joins:} Se realiza automáticamente cuando una base de datos recibe una consulta SQL con la cláusula \verb|JOIN|. 
 \end{itemize}
 
-Dependiendo del tipo de {\itshape join} utilizado, la memoria tiene un cierto impacto negativo. Kinetica constatemente busca la manera de crear el {\itshape join} más eficiente posible. 
+Dependiendo del tipo de {\itshape join} usado, la memoria se verá afectada negativamente. Kinetica busca constantemente la forma de crear el {\itshape join} más eficiente posible. 
 
-\subsection{Logging}
-Kinetica cuenta con un registro el cual almacena información como: las interacciones de la base de datos, {\itshape startup/shutdown}, información de errores y más. Este registro puede ser configurado para que se almacene otra información que no está por default.
+\subsection{{\itshape Logging}}
 
-\subsection{Respaldos y {\itshape Recovery}}
+Kinetica mantiene un registro que almacena información como interacciones de la base de datos, {\itshape startup}/{\itshape shutdown}, errores, etc. Este registro se puede configurar para almacenar información que no está predeterminada.
 
-Existe una herramienta para la administración, configuración e instalación de Kinetica llamada {\itshape KAgent}, la cual también permite simplificar el proceso de respaldo y {\itshape recovery} de una base de datos en Kinetica. 
+\subsection{Respaldos y {\itshape recovery}}
 
-Todos los datos dentro de la base de datos pueden ser respaldados de manera automática (es decir, siguiendo una agenda preestablecida), o bien cuando el usuario así lo requiera. Los respaldos son almacenados de manera local para cada uno de los nodos dentro del cluster.
+Existe una herramienta para la administración, configuración e instalación de Kinetica llamada {\itshape KAgent}, la cual también simplifica el proceso de respaldo y {\itshape recovery} de una base de datos en Kinetica. 
+
+Se puede realizar un de todos los datos de la base de datos de forma automática, es decir, siguiendo un programa preestablecido, o cuando el usuario así lo requiera. Las copias de seguridad se almacenan localmente para cada uno de los nodos dentro del clúster.
 
 \subsection{Manejo de transacciones}
-\subsection{Cold/hot store}
+
+\subsection{{\itshape Cold}/{\itshape Hot Store}}
+
 \subsection{Manejo de datos históricos}
 
-% Pendiente
+\section{Resultados}
+
+\section{Conclusiones}
 
 \end{document}
 \endinput
