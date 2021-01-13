@@ -50,7 +50,7 @@
 
 Kinetica es una base de datos en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
 
-Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o VRAM, en el caso de las GPUs.
+Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o VRAM, en el caso de las GPUs. \cite{faq}
 
 \section{Desarrollo}
 
@@ -59,17 +59,18 @@ Al tratarse de una base de datos orientada a columnas diseñada para el procesam
 \begin{figure}[ht]
   \centering
   \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture}
-  \caption{Arquitectura del DBMS}
+  \caption{Arquitectura del DBMS \cite{overview}}
   \Description{Arquitectura del DBMS}
   \label{fig:Arquitectura del DBMS}
 \end{figure}
 
-Kinetica cuenta con una arquitectura distribuida diseñada así para el procesamiento de datos a escala. Un clúster de Kinetica, conformado por nodos idénticos, es capaz de ejecutarse en hardware básico, así como en aquellos equipados con GPU. Uno de esos nodos es seleccionado para ser el nodo de agregación principal. En la Fig. \ref{fig:Arquitectura del DBMS} se muestra un diagrama de la arquitectura de Kinetica.
+Kinetica cuenta con una arquitectura distribuida diseñada así para el procesamiento de datos a escala. Un clúster de Kinetica, conformado por nodos idénticos, es capaz de ejecutarse en hardware básico, así como en aquellos equipados con GPU. Uno de esos nodos es seleccionado para ser el nodo de agregación principal. En la Fig. \ref{fig:Arquitectura del DBMS} se muestra un diagrama de la arquitectura de Kinetica. \cite{overview}
 
 \subsection{Tipo de almacenamiento utilizado}
 
-La interfaz API nativa a Kinetica para el almacenamiento de datos es de tipo objeto; cada uno de ellos es una fila en la tabla.
+La interfaz API nativa a Kinetica para el almacenamiento de datos es de tipo objeto; cada uno de ellos es una fila en la tabla. \cite{overview}
 
+% Missing citation
 \subsection{Representación en memoria}
 
 Dado que el tipo de almacenamiento utilizado por Kinetica es orientado a columnas, la representación en memoria es secuencial. Así, cada registro de una columna va después del otro, e inmediatamente después de terminar esa columna, comienza la siguiente.
@@ -88,13 +89,15 @@ Kinetica admite cuatro configuraciones de compresión diferentes que varían seg
 \end{itemize}
 
 Kinetica, además, permite la codificación por diccionario, la cual puede ser aplicada a columnas individuales de los siguientes tipos de datos:
+
 \begin{itemize}
   \item \verb|int|
   \item \verb|long|
   \item \verb|date|
   \item \verb|char1 - char256|
 \end{itemize}
-De esta manera, se almacenan en memoria los valores únicos por cada columna para después ser asociados a su correspondiente registro. Esto elimina el almacenamiento de valores duplicados por columna, reduciendo, así, el uso de la memoria y el espacio en disco requeridos para almacenar los datos. 
+
+De esta manera, se almacenan en memoria los valores únicos por cada columna para después ser asociados a su correspondiente registro. Esto elimina el almacenamiento de valores duplicados por columna, reduciendo, así, el uso de la memoria y el espacio en disco requeridos para almacenar los datos. \cite{compression,dictionary-encoding}
 
 \subsection{Particionamiento}
 
@@ -105,7 +108,7 @@ Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar
   \item {\itshape Intervalo:} Las particiones por intervalo se definen como intervalos numéricos o intervalos basados en el tiempo. Todos los registros cuya llave de partición está dentro del intervalo, o en el rango inferior, son asignados a esa partición.
   \item {\itshape Lista:} Las particiones por lista pueden ser manuales o automáticas, donde, en general, cuando los registros cuyos valores de la llave de partición estén dentro de la lista prefinida, son asignados a esa partición.
   \item {\itshape Hash:} Las particiones por hash se definen por un número exacto de particiones, donde cada uno de los registros es asignado a una partición basado en el hash de la llave de partición.
-  \item {\itshape Series:} El particionamiento por serie segmenta los datos en una secuencia de particiones alocadas de manera dinámica.
+  \item {\itshape Series:} El particionamiento por serie segmenta los datos en una secuencia de particiones alocadas de manera dinámica. \cite{tables}
 \end{itemize}
 
 \subsection{Operaciones DML}
@@ -159,7 +162,7 @@ La operación \verb|UPDATE|, por otro lado, permite asignar un nuevo valor const
 
 \subsubsection{Operación de eliminación}
 
-Finalmente, la operación \verb|DELETE| permite eliminar registros de una tabla mediante el formato \verb|DELETE FROM...WHERE|.
+Finalmente, la operación \verb|DELETE| permite eliminar registros de una tabla mediante el formato \verb|DELETE FROM...WHERE|. \cite{sql-support}
 
 \begin{lstlisting}
   DELETE
@@ -194,12 +197,14 @@ Asimismo, hay dos tipos de ejecución para los {\itshape joins}:
   \item {\itshape SQL joins:} Se realiza automáticamente cuando una base de datos recibe una consulta SQL con la cláusula \verb|JOIN|. 
 \end{itemize}
 
-Dependiendo del tipo de {\itshape join} usado, la memoria se verá afectada positiva o negativamente. Kinetica busca constantemente la forma de crear el {\itshape join} más eficiente posible. 
+Dependiendo del tipo de {\itshape join} usado, la memoria se verá afectada positiva o negativamente. Kinetica busca constantemente la forma de crear el {\itshape join} más eficiente posible. \cite{sql-support}
 
-\subsection{{\itshape Logging}}
+% Missing citation
+\subsection{{\itshape Logging}} 
 
 Kinetica mantiene un registro que almacena información como interacciones de la base de datos, {\itshape startup}/{\itshape shutdown}, errores, etc. Este registro se puede configurar para almacenar información que no está predeterminada.
 
+% Missing citation
 \subsection{Respaldos y {\itshape recovery}}
 
 Existe una herramienta para la administración, configuración e instalación de Kinetica llamada {\itshape KAgent}, la cual también simplifica el proceso de respaldo y {\itshape recovery} de una base de datos en Kinetica. 
@@ -208,8 +213,9 @@ Se puede realizar un respaldo de todos los datos de la base de datos de forma au
 
 \subsection{Manejo de transacciones}
 
-Debido a la potencia que le brinda la compatibilidad con  GPU, Kinetica rara vez se usa para el manejo de transacciones. Como sistema OLAP, es mejor aprovechado para consultas de análisis de datos junto con otro DBMS de tipo OLTP.
+Debido a la potencia que le brinda la compatibilidad con  GPU, Kinetica rara vez se usa para el manejo de transacciones. Como sistema OLAP, es mejor aprovechado para consultas de análisis de datos junto con otro DBMS de tipo OLTP. \cite{faq}
 
+% Missing citation
 \subsection{{\itshape Cold}/{\itshape Hot Storage}}
 
 Kinetica segmenta el almacenamiento de datos, ya sea temporal o permantente, por niveles o {\itshape tiers}. Hay cinco {\itshape tiers} soportados por Kinetica: 
@@ -224,6 +230,7 @@ Kinetica segmenta el almacenamiento de datos, ya sea temporal o permantente, por
 
 En la Fig. \ref{fig:Niveles de almacenamiento} se muestra un diagrama de los diferentes niveles de almacenamiento.
 
+% Missing citation
 \begin{figure}[ht]
   \centering
   \includegraphics[width=75mm, scale=0.5]{./images/storage-tiers}
@@ -234,17 +241,31 @@ En la Fig. \ref{fig:Niveles de almacenamiento} se muestra un diagrama de los dif
 
 El rendimiento de cada {\itshape tier} es inversamente proporcional a su capacidad de almacenamiento.  
 
-\subsection{Manejo de datos históricos \cite{Abril07}}
+\subsection{Manejo de datos históricos}
 
-Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata.
-
-% Referencia: https://www.kinetica.com/products/why-streaming-data-warehouse/
+Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata. \cite{streaming-data-warehouse}
 
 \section{Resultados}
 
 \section{Conclusiones}
 
-\section{Referencias}
-% [1] Kinetica. 2021. What Is A Streaming Data Warehouse?. [online] Available at: <https://www.kinetica.com/products/why-streaming-data-warehouse/> [Accessed 13 January 2021].
+\begin{thebibliography}{9}
+  \bibitem{faq} 
+  «{\itshape Frequently Asked Questions}». https://www.kinetica.com/product/faq/
+  \bibitem{overview} 
+  «{\itshape Overview}».
+  https://www.kinetica.com/docs/overview/arch.html
+  \bibitem{compression}
+  «{\itshape Compression}». https://www.kinetica.com/docs/concepts/compression.html
+  \bibitem{dictionary-encoding}
+  «{\itshape Dictionary Encoding}». https://www.kinetica.com/docs/concepts/compression.html
+  \bibitem{tables}
+  «{\itshape Tables}». https://www.kinetica.com/docs/concepts/tables.html
+  \bibitem{sql-support}
+  «{\itshape SQL Support}». https://www.kinetica.com/docs/concepts/sql.html
+  \bibitem{streaming-data-warehouse}
+  «{\itshape What Is a Streaming Data Warehouse?}». https://www.kinetica.com/products/why-streaming-data-warehouse/
+\end{thebibliography}
+
 \end{document}
 \endinput
