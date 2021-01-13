@@ -45,11 +45,12 @@
 
 Kinetica es una base de datos en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
 
-Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o vRAM, en el caso de las GPUs.
+Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o VRAM, en el caso de las GPUs.
 
 \section{Desarrollo}
 
 \subsection{Arquitectura del DBMS}
+
 \begin{figure}[ht]
   \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
   \caption{Arquitectura del DBMS}
@@ -202,10 +203,30 @@ Se puede realizar un respaldo de todos los datos de la base de datos de forma au
 
 Debido a la potencia que le brinda la compatibilidad con  GPU, Kinetica rara vez se usa para el manejo de transacciones. Como sistema OLAP, es mejor aprovechado para consultas de análisis de datos junto con otro DBMS de tipo OLTP.
 
-\subsection{{\itshape Cold}/{\itshape Hot Store}}
-% https://www.kinetica.com/docs/rm/concepts.html#data-movement
+\subsection{{\itshape Cold}/{\itshape Hot Storage}}
+
+Kinetica segmenta el almacenamiento de datos, ya sea temporal o permantente, por niveles o {\itshape tiers}. Hay cinco {\itshape tiers} soportados por Kinetica: 
+
+\begin{itemize}
+  \item {\itshape VRAM:}  Compuesto por memoria RAM de GPU en cada nodo del clúster.
+  \item {\itshape RAM:}  Compuesto por memoria del sistema en cada nodo del clúster.
+  \item {\itshape Caché de disco:}  Sirve como espacio temporal para el intercambio de datos que no caben en la memoria RAM o VRAM.
+  \item {\itshape Persist:} Contiene registros que se conservan cada vez que se reinicia la base de datos.
+  \item {\itshape Cold Storage:} Se utiliza para almacenar datos a los que se accede con poca frecuencia.
+\end{itemize}
+
+En la Fig. \ref{fig:Niveles de almacenamiento} se muestra un diagrama de los diferentes niveles de almacenamiento.
+
+\begin{figure}[ht]
+  \includegraphics[width=75mm, scale=0.5]{./images/storage-tiers.jpg}
+  \caption{Niveles de almacenamiento}
+  \label{fig:Niveles de almacenamiento}
+\end{figure}
+
+El rendimiento de cada {\itshape tier} es inversamente proporcional a su capacidad de almacenamiento.  
 
 \subsection{Manejo de datos históricos}
+
 Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata [1].
 
 % Referencia: https://www.kinetica.com/products/why-streaming-data-warehouse/
