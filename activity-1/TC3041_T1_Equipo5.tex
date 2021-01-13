@@ -79,6 +79,15 @@ Kinetica admite cuatro configuraciones de compresión diferentes que varían seg
   \item \verb|lz4hc|: Menores velocidades de compresión y descompresión
 \end{itemize}
 
+Kinetica, además, permite la codificación por diccionario, la cual puede ser aplicada a columnas individuales de los siguientes tipos de datos:
+\begin{itemize}
+  \item \verb|int|
+  \item \verb|long|
+  \item \verb|date|
+  \item \verb|char1 - char256|
+\end{itemize}
+De esta manera, se almacenan en memoria los valores únicos por cada columna para después ser asociados a su correspondiente registro. Esto elimina el almacenamiento de valores duplicados por columna, reduciendo, así, el uso de la memoria y el espacio en disco requeridos para almacenar los datos. 
+
 \subsection{Particionamiento}
 
 Los datos de una tabla pueden ser sometidos a un particionamiento para optimizar el rendimiento y el manejo de datos. Los esquemas de particionamiento permitidos en Kinetica son los siguientes:
@@ -192,12 +201,18 @@ Se puede realizar un de todos los datos de la base de datos de forma automática
 \subsection{Manejo de transacciones}
 
 \subsection{{\itshape Cold}/{\itshape Hot Store}}
+% https://www.kinetica.com/docs/rm/concepts.html#data-movement
 
 \subsection{Manejo de datos históricos}
+Kinetica cuenta con un {\itshape streaming data warehouse} el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar en tiempo real los datos almacenados. De esta manera, se obtiene un anáisis que puede ser utilizado de manera innmediata [1].
+
+% Referencia: https://www.kinetica.com/products/why-streaming-data-warehouse/
 
 \section{Resultados}
 
 \section{Conclusiones}
 
+\section{Referencias}
+% [1] Kinetica. 2021. What Is A Streaming Data Warehouse?. [online] Available at: <https://www.kinetica.com/products/why-streaming-data-warehouse/> [Accessed 13 January 2021].
 \end{document}
 \endinput
