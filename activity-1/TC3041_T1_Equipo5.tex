@@ -1,6 +1,5 @@
 \documentclass[acmsmall]{acmart}
 
-\usepackage{graphicx}
 \usepackage{listings}
 
 \AtBeginDocument{%
@@ -19,18 +18,24 @@
 \title{Actividad 1. Bases de datos en memoria}
 
 \author{Daniela Vignau}
+\email{a01021698@itesm.mx}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
+  \city{Ciudad de México}
   \country{México}}
 
 \author{Cristopher Cejudo}
+\email{a01025468@itesm.mx}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
+  \city{Ciudad de México}
   \country{México}}
 
 \author{Héctor Reyes}
+\email{a01339607@itesm.mx}
 \affiliation{%
   \institution{Tecnológico de Monterrey}
+  \city{Ciudad de México}
   \country{México}}
 
 \renewcommand{\shortauthors}{Daniela Vignau, Cristopher Cejudo, Héctor Reyes}
@@ -52,8 +57,10 @@ Al tratarse de una base de datos orientada a columnas diseñada para el procesam
 \subsection{Arquitectura del DBMS}
 
 \begin{figure}[ht]
-  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture.jpg}
+  \centering
+  \includegraphics[width=75mm, scale=0.5]{./images/dbms-architecture}
   \caption{Arquitectura del DBMS}
+  \Description{Arquitectura del DBMS}
   \label{fig:Arquitectura del DBMS}
 \end{figure}
 
@@ -218,16 +225,18 @@ Kinetica segmenta el almacenamiento de datos, ya sea temporal o permantente, por
 En la Fig. \ref{fig:Niveles de almacenamiento} se muestra un diagrama de los diferentes niveles de almacenamiento.
 
 \begin{figure}[ht]
-  \includegraphics[width=75mm, scale=0.5]{./images/storage-tiers.jpg}
+  \centering
+  \includegraphics[width=75mm, scale=0.5]{./images/storage-tiers}
   \caption{Niveles de almacenamiento}
+  \Description{Niveles de almacenamiento}
   \label{fig:Niveles de almacenamiento}
 \end{figure}
 
 El rendimiento de cada {\itshape tier} es inversamente proporcional a su capacidad de almacenamiento.  
 
-\subsection{Manejo de datos históricos}
+\subsection{Manejo de datos históricos \cite{Abril07}}
 
-Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata [1].
+Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata.
 
 % Referencia: https://www.kinetica.com/products/why-streaming-data-warehouse/
 
