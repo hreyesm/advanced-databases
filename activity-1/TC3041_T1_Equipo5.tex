@@ -43,9 +43,9 @@
 
 \section{Introducción}
 
-{\itshape Kinetica} es una base de datos distribuida en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
+Kinetica es una base de datos en memoria que permite ingerir, analizar y visualizar datos simultáneamente. Es un DBMS único en el sentido de que aprovecha el rendimiento de la unidad de procesamiento gráfico (GPU) para realizar operaciones con más rapidez que las bases de datos tradicionales.
 
-Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Por tanto, no es adecuada como sistema de uso transaccional (OLTP). Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o vRAM, en el caso de las GPUs.
+Al tratarse de una base de datos orientada a columnas diseñada para el procesamiento analítico (OLAP), Kinetica está optimizada para manejar grandes volúmenes de datos de alta cardinalidad. Kinetica organiza los datos de forma estructurada, similar a otras bases de datos relacionales, y los almacena en la memoria RAM o vRAM, en el caso de las GPUs.
 
 \section{Desarrollo}
 
@@ -68,7 +68,7 @@ Dado que el tipo de almacenamiento utilizado por Kinetica es orientado a columna
 
 \subsection{Mecanismos de compresión}
 
-Es posible aplicar diferentes mecanismos de compresión a las columnas de las tablas de Kinetica. De manera predeterminada, las columnas son almacenadas sin compresión. En el caso de que se compriman, permanecen en ese estado hasta que son utilizadas. Cuando se recuperan los datos, se realiza una copia temporal de los datos descomprimidos, la cual es descartada una vez que ya no se utiliza.
+Es posible aplicar diferentes mecanismos de compresión a las columnas de las tablas de Kinetica. De manera predeterminada, las columnas son almacenadas sin compresión. En caso de que se desee comprimirlas, permanecen en ese estado hasta que son utilizadas. Cuando se recuperan los datos, se realiza una copia temporal de los datos descomprimidos, la cual es descartada una vez que ya no se utiliza.
 
 Kinetica admite cuatro configuraciones de compresión diferentes que varían según su velocidad:
 
@@ -139,7 +139,7 @@ De forma predeterminada, Kinetica descartará cualquier registro a insertar cuya
 
 \subsubsection{Operación de actualización}
 
-Por otro lado, la operación \verb|UPDATE| permite asignar un nuevo valor constante a una columna mediante el formato \verb|UPDATE...SET...WHERE|.
+La operación \verb|UPDATE|, por otro lado, permite asignar un nuevo valor constante a una columna mediante el formato \verb|UPDATE...SET...WHERE|.
 
 \begin{lstlisting}
   UPDATE example.employee
@@ -169,7 +169,7 @@ No se encontró información sobre el proceso de reconstrucción de tuplas en Ki
 
 \subsection{Tipos de {\itshape join}}
 
-Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. Los tipos de {\itshape join} permitidos se enlistan a continuación:
+Con Kinetica, es posible conectar datos relacionados entre dos o más tablas a través de {\itshape join views}. A continuación se enlistan los tipos de {\itshape join} permitidos:
 
 \begin{itemize}
   \item {\itshape Inner:} Regresa los registros que coinciden entre dos tablas.
@@ -186,7 +186,7 @@ Asimismo, hay dos tipos de ejecución para los {\itshape joins}:
   \item {\itshape SQL joins:} Se realiza automáticamente cuando una base de datos recibe una consulta SQL con la cláusula \verb|JOIN|. 
 \end{itemize}
 
-Dependiendo del tipo de {\itshape join} usado, la memoria se verá afectada negativamente. Kinetica busca constantemente la forma de crear el {\itshape join} más eficiente posible. 
+Dependiendo del tipo de {\itshape join} usado, la memoria se verá afectada positiva o negativamente. Kinetica busca constantemente la forma de crear el {\itshape join} más eficiente posible. 
 
 \subsection{{\itshape Logging}}
 
@@ -196,15 +196,17 @@ Kinetica mantiene un registro que almacena información como interacciones de la
 
 Existe una herramienta para la administración, configuración e instalación de Kinetica llamada {\itshape KAgent}, la cual también simplifica el proceso de respaldo y {\itshape recovery} de una base de datos en Kinetica. 
 
-Se puede realizar un de todos los datos de la base de datos de forma automática, es decir, siguiendo un programa preestablecido, o cuando el usuario así lo requiera. Las copias de seguridad se almacenan localmente para cada uno de los nodos dentro del clúster.
+Se puede realizar un respaldo de todos los datos de la base de datos de forma automática —es decir, siguiendo un programa preestablecido— o cuando el usuario así lo requiera. Las copias de seguridad se almacenan localmente para cada uno de los nodos dentro del clúster.
 
 \subsection{Manejo de transacciones}
+
+Debido a la potencia que le brinda la compatibilidad con  GPU, Kinetica rara vez se usa para el manejo de transacciones. Como sistema OLAP, es mejor aprovechado para consultas de análisis de datos junto con otro DBMS de tipo OLTP.
 
 \subsection{{\itshape Cold}/{\itshape Hot Store}}
 % https://www.kinetica.com/docs/rm/concepts.html#data-movement
 
 \subsection{Manejo de datos históricos}
-Kinetica cuenta con un {\itshape streaming data warehouse} el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar en tiempo real los datos almacenados. De esta manera, se obtiene un anáisis que puede ser utilizado de manera innmediata [1].
+Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferencia de los {\itshape data warehouses} tradicionales, puede analizar los datos almacenados en tiempo real. De este modo, se obtiene un anáisis que puede ser utilizado de manera innmediata [1].
 
 % Referencia: https://www.kinetica.com/products/why-streaming-data-warehouse/
 
