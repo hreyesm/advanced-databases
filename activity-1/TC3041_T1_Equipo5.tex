@@ -273,6 +273,8 @@ A continuación se presenta un análisis sobre los resultados obtenidos al reali
   \label{fig:Peticion de insercion}
 \end{figure}
 
+\clearpage
+
 En las gráficas anteriores podemos observar los tiempos y recursos requeridos para la inserción de 500 mil, 1 millón y 5 millones de registros respectivamente. Se requirió de 7Gb en memoria RAM asignados a Kinetica para lograr la inserción de los 6.5 millones de registros. La inserción de 5 millones tomó aproximadamente 4 minutos en poder completarse.
 
 La tabla utilizada se compuso de los siguientes campos:
@@ -287,38 +289,134 @@ La tabla utilizada se compuso de los siguientes campos:
 
 \subsection{Consulta sobre tabla completa}
 
-Para la realización de esta consulta se realizó el query \verb|SELECT * FROM ki.home.world_population|. Se obtuvo un tiempo de ejecución de {\itshape 0.159s} y un tiempo de transferencia de datos de {\itshape 0.267s}.
+Para la realización de esta consulta se realizó el query \verb|SELECT * FROM ki_home.world_population|.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=95mm, scale=0.7]{./images/query-select.png}
-  \caption{Consulta sobre tabla completa}
-  \Description{Consulta sobre tabla completa}
-  \label{fig:Consulta sobre tabla completa}
+  \includegraphics[width=95mm, scale=0.7]{./images/query-select5M.png}
+  \caption{Consulta sobre tabla completa sobre 5 millones de registros}
+  \Description{Consulta sobre tabla completa 5 millones de registros}
+  \label{fig:Consulta sobre tabla completa 5 millones de registros}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-select1M.png}
+  \caption{Consulta sobre tabla completa sobre 1 millón de registros}
+  \Description{Consulta sobre tabla completa 1 millón de registros}
+  \label{fig:Consulta sobre tabla completa 1 millon de registros}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-select500.png}
+  \caption{Consulta sobre tabla completa sobre 500  mil registros}
+  \Description{Consulta sobre tabla completa 500 mil registros}
+  \label{fig:Consulta sobre tabla completa 500 mil registros}
 \end{figure}
 
 \subsection{Consulta haciendo uso de funciones de agregación y agrupamiento}
 
-Para la realización de esta consulta se hizo uso de las funciones {\itshape COUNT(), SUM() y GROUP  BY}. El query ejecutado fue el siguiente \verb|SELECT COUNT(id) AS 'Total_by_gender', SUM(id),| \verb|gender FROM ki_home.world_population GROUP BY gender|. Se obtuvo un tiempo de ejecución de {\itshape 1.968s} y un tiempo de transferencia de datos de {\itshape 0.02s}.
+Para la realización de esta consulta se hizo uso de las funciones {\itshape COUNT(), SUM() y GROUP  BY}. El query ejecutado fue el siguiente \verb|SELECT COUNT(id) AS 'Total_by_gender', SUM(id),| \verb|gender FROM ki_home.world_population GROUP BY gender|.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=95mm, scale=0.7]{./images/query-aggregation.png}
-  \caption{Consulta con funciones de agregación y agrupamiento}
-  \Description{Consulta con funciones de agregación y agrupamiento}
-  \label{fig:Consulta con funciones de agregacion y agrupamiento}
+  \includegraphics[width=95mm, scale=0.7]{./images/query-aggregation5M.png}
+  \caption{Consulta con funciones de agregación y agrupamiento sobre 5 millones de registros}
+  \Description{Consulta con funciones de agregación y agrupamiento sobre 5 millones de registros}
+  \label{fig:Consulta con funciones de agregacion y agrupamiento sobre 5 millones de registros}
 \end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-aggregation1M.png}
+  \caption{Consulta con funciones de agregación y agrupamiento sobre 1 millón de registros}
+  \Description{Consulta con funciones de agregación y agrupamiento sobre 1 millón de registros}
+  \label{fig:Consulta con funciones de agregacion y agrupamiento sobre 1 millon de registros}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-aggregation500.png}
+  \caption{Consulta con funciones de agregación y agrupamiento sobre 500 mil registros}
+  \Description{Consulta con funciones de agregación y agrupamiento sobre 500 mil}
+  \label{fig:Consulta con funciones de agregacion y agrupamiento sobre 500 mil}
+\end{figure}
+
+\clearpage
 
 \subsection{Consulta con condición de filtrado}
 
-Por último, para la realización de la consulta con condición de filtrado se ejecutó el siguiente query \verb|SELECT * FROM ki_home.world_population WHERE name = 'Daniel'|. En esta consulta se obtuvo un tiempo de ejecución de {\itshape 14.218s} y un tiempo de transferencia de datos de {\itshape 0.454s}, siendo estos los tiempos más elevados de las tres consultas.
+Por último, para la realización de la consulta con condición de filtrado se ejecutó el siguiente query \verb|SELECT * FROM ki_home.world_population WHERE name = 'Daniel'|.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=95mm, scale=0.7]{./images/query-where.png}
-  \caption{Consulta con condición de filtrado}
-  \Description{Consulta con condición de filtrado}
-  \label{fig:Consulta con condicion de filtrado}
+  \includegraphics[width=95mm, scale=0.7]{./images/query-filter5M.png}
+  \caption{Consulta con condición de filtrado sobre 5 millones de registros}
+  \Description{Consulta con condición de filtrado sobre 5 millones de registros}
+  \label{fig:Consulta con condicion de filtrado sobre 5 millones de registros}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-filter1M.png}
+  \caption{Consulta con condición de filtrado sobre 1 millón de registros}
+  \Description{Consulta con condición de filtrado sobre 1 millón de registros}
+  \label{fig:Consulta con condicion de filtrado sobre 1 millon de registros}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-filter500.png}
+  \caption{Consulta con condición de filtrado sobre 500 mil registros}
+  \Description{Consulta con condición de filtrado sobre 500 mil registros}
+  \label{fig:Consulta con condicion de filtrado sobre 500 mil registros}
+\end{figure}
+
+\subsection{Tabla Comparativa de Tiempos de Ejecución}
+
+A continuación se presenta una tabla con los tiempos de ejecución de cada operación realizada.
+
+\begin{center}
+  \begin{tabular}{||c c c c||} 
+  \hline
+  Operación & 500 mil registros & 1 millón de registros & 5 millones de registros\\ [0.5ex] 
+  \hline\hline
+  Inserción & 41s & 1min 27s & 3min 46s \\ 
+  \hline
+  Consulta Scan & 0.224s & 0.338s & 0.424s \\
+  \hline
+  Consulta Agregación & 0.216s & 0.513 s& 11.459s \\
+  \hline
+  Consulta Filtrado & 0.803s & 1.326s & 3.232s \\ [1ex] 
+  \hline
+ \end{tabular}
+\end{center}
+
+\clearpage
+
+\subsection{Gráficas Comparativas de Tiempos de Ejecución}
+
+Con la información anteriormente presentada fueron creadas las siguentes gráficas para su visualización.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/insertion-graph.png}
+  \caption{Gráfica comparativa de los tiempos de inserción}
+  \Description{Gráfica comparativa de los tiempos de inserción}
+  \label{fig:Grafica comparativa de los tiempos de insercion}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/querys-graph.png}
+  \caption{Gráfica comparativa de los tiempos de consulta}
+  \Description{Gráfica comparativa de los tiempos de consulta}
+  \label{fig:Grafica comparativa de los tiempos de consulta}
 \end{figure}
 
 \section{Conclusiones}
