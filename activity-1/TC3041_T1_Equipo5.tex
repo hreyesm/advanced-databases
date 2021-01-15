@@ -247,7 +247,7 @@ Kinetica cuenta con un {\itshape streaming data warehouse}, el cual, a diferenci
 
 \section{Resultados}
 
-Aquí van los resultados chidos
+A continuación se presenta un análisis sobre los resultados obtenidos al realizar consultas a una base datos sobre Kinetica. Debido a limitaciones relacionadas con la memoria RAM del equipo utilizado y el límite de registros por tabla, se realizó un escalamiento de los datos requeridos con tres inserciones de 500 mil, 1 millón y 5 millones de registros respectivamente.
 
 \begin{figure}[ht]
   \centering
@@ -273,25 +273,49 @@ Aquí van los resultados chidos
   \label{fig:Peticion de insercion}
 \end{figure}
 
+En las gráficas anteriores podemos observar los tiempos y recursos requeridos para la inserción de 500 mil, 1 millón y 5 millones de registros respectivamente. Se requirió de 7Gb en memoria RAM asignados a Kinetica para lograr la inserción de los 6.5 millones de registros. La inserción de 5 millones tomó aproximadamente 4 minutos en poder completarse.
+
+La tabla utilizada se compuso de los siguientes campos:
+
+\begin{itemize}
+  \item id : long
+  \item name : string | char128
+  \item last : string | char128
+  \item gender : string | char64
+  \item country : string | char128
+\end{itemize}
+
+\subsection{Consulta sobre tabla completa}
+
+Para la realización de esta consulta se realizó el query \verb|SELECT * FROM ki.home.world_population|. Se obtuvo un tiempo de ejecución de {\itshape 0.159s} y un tiempo de transferencia de datos de {\itshape 0.267s}.
+
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=75mm, scale=0.5]{./images/query-select.png}
+  \includegraphics[width=95mm, scale=0.7]{./images/query-select.png}
   \caption{Consulta sobre tabla completa}
   \Description{Consulta sobre tabla completa}
   \label{fig:Consulta sobre tabla completa}
 \end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=75mm, scale=0.5]{./images/query-aggregation.png}
-  \caption{Consulta con funciones de agregación y agrupamiento}
-  \Description{Consulta con funciones de agregación y agrupamiento}
-  \label{fig:Consulta con funciones de agregación y agrupamiento}
-\end{figure}
+\subsection{Consulta haciendo uso de funciones de agregación y agrupamiento}
+
+Para la realización de esta consulta se hizo uso de las funciones {\itshape COUNT(), SUM() y GROUP  BY}. El query ejecutado fue el siguiente \verb|SELECT COUNT(id) AS 'Total_by_gender', SUM(id), gender FROM ki_home.world_population GROUP BY gender|. Se obtuvo un tiempo de ejecución de {\itshape 1.968s} y un tiempo de transferencia de datos de {\itshape 0.02s}.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=75mm, scale=0.5]{./images/query-where.png}
+  \includegraphics[width=95mm, scale=0.7]{./images/query-aggregation.png}
+  \caption{Consulta con funciones de agregación y agrupamiento}
+  \Description{Consulta con funciones de agregación y agrupamiento}
+  \label{fig:Consulta con funciones de agregacion y agrupamiento}
+\end{figure}
+
+\subsection{Consulta con condición de filtrado}
+
+Por último, para la realización de la consulta con condición de filtrado se ejecutó el siguiente query \verb|SELECT * FROM ki_home.world_population WHERE name = 'Daniel'|. En esta consulta se obtuvo un tiempo de ejecución de {\itshape 14.218s} y un tiempo de transferencia de datos de {\itshape 0.454s}, siendo estos los tiempos más elevados de las tres consultas.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=95mm, scale=0.7]{./images/query-where.png}
   \caption{Consulta con condición de filtrado}
   \Description{Consulta con condición de filtrado}
   \label{fig:Consulta con condicion de filtrado}
