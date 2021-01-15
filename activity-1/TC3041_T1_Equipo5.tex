@@ -420,7 +420,9 @@ Con la información anteriormente presentada fueron creadas las siguentes gráfi
 
 Es posible concluir de los resultados anteriores que Kinetica no es una base de datos diseñada para el manejo de poblaciones tan grandes en un hardware limitado (sin GPU), ya que la memoria RAM fue rápidamente consumida. Es por esto que el equipo se vio obligado a hacer una extrapolación de las poblaciones. 
 
-Dicho esto, los resultados obtenidos indican que, conforme crece el tamaño de la población, tanto el tiempo de inserción como el de las consultas aumenta. 
+Un aspecto importante que logra observarse, es que las operaciones de inserción son por mucho, más costosas que las operaciones de consulta.
+
+Dicho esto, los resultados obtenidos indican que, conforme crece el tamaño de la población, tanto el tiempo de inserción como el de las consultas aumenta. Esto puede verse con mayor claridad en las operaciones de inserción y en las consultas por filtrado, donde los tiempos ejecución aumentaron de manera exponencial con relación al número de registros almacenados en la tabla.
 
 \begin{thebibliography}{9}
   \bibitem{faq} 
