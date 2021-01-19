@@ -1,4 +1,4 @@
-unwind: Obtener el número de personas de nombre "Murphy" que están inscritas por grupo
+unwind: Obtener en orden descendente el número de personas de nombre "Murphy" que están inscritas por grupo 
     Mongo:
     [{$match: {
         "name": "Murphy"
@@ -104,3 +104,66 @@ lookup: Obtener el promedio de likes de los 10 posts con más likes con el hasht
     ]
 
 3. graphLookup:
+
+
+4. geoNear: Obtener la distancia promedio que existe a partir del punto [-77.73, -5.71], de 56 posts con mayor distancia, cuya fecha de publicación es entre '2021-01-01' y '2020-06-01' y que tienen más de 950 likes
+  Mongo:
+    [{$geoNear: {
+      near: {
+        type: "Point",
+        coordinates: [-77.73, -5.71]
+      },
+      distanceField: "distance"
+    }}, {$match: {
+      date: {
+        $lt: ISODate('2021-01-01'),
+        $gte: ISODate('2020-06-01')
+      },
+      likes: {
+        $gt: 950
+      }
+    }}, {$sort: {
+      distance: 1
+    }}, {$skip: 50}, {$group: {
+      _id:'distance',
+      avgDistance: {
+        $avg: "$distance"
+      }
+    }}]
+  Python:
+    [
+      {
+          '$geoNear': {
+              'near': {
+                  'type': 'Point', 
+                  'coordinates': [
+                      -77.73, -5.71
+                  ]
+              }, 
+              'distanceField': 'distance'
+          }
+      }, {
+          '$match': {
+              'date': {
+                  '$lt': datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc), 
+                  '$gte': datetime(2020, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
+              }, 
+              'likes': {
+                  '$gt': 950
+              }
+          }
+      }, {
+          '$sort': {
+              'distance': 1
+          }
+      }, {
+          '$skip': 50
+      }, {
+          '$group': {
+              '_id': 'distance', 
+              'avgDistance': {
+                  '$avg': '$distance'
+              }
+          }
+      }
+    ]
