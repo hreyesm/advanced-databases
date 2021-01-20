@@ -90,7 +90,62 @@ class Database:
         return query, list(lookup)
     
     def graphLookup(self):
-        print("PENDING")
+        query = [
+            {
+                '$match': {
+                    'email': 'quis.diam.luctus@ultricies.net'
+                }
+            }, {
+                '$graphLookup': {
+                    'from': 'users', 
+                    'startWith': '$friends', 
+                    'connectFromField': 'friends', 
+                    'connectToField': 'name', 
+                    'as': 'ITCs', 
+                    'maxDepth': 2, 
+                    'restrictSearchWithMatch': {
+                        'groups': 'ITC',
+                        'friends': 'Marah'
+                    }
+                }
+            }, {
+                '$project': {
+                    'connections': '$ITCs._id'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$connections'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'posts', 
+                    'localField': 'connections', 
+                    'foreignField': 'user', 
+                    'as': 'postInfo'
+                }
+            }, {
+                '$sort': {
+                    'postInfo.likes': -1
+                }
+            }, {
+                '$limit': 1
+            }, {
+                '$unwind': {
+                    'path': '$postInfo'
+                }
+            }, {
+                '$group': {
+                    '_id': None, 
+                    'totalLikes': {
+                        '$sum': '$postInfo.likes'
+                    }
+                }
+            }
+        ]
+        users = self.db['users']
+        graphLookup = users.aggregate(query)
+        self.client.close()
+        return query, list(graphLookup)
     
     def geoNear(self):
         query = [

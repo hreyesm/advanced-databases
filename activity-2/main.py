@@ -6,7 +6,7 @@ db = Database()
 
 def main():
     option = 1
-    while option != -1:
+    while option != -1: 
         option = int(input("\nSeleccione una query a ejecutar (1-5):\n\t1.Unwind\n\t2.Lookup\n\t3.GraphLookup\n\t4.GeoNear\n\t5.Facet\nIntroduzca -1 para salir\n"))
         if option == 1:
             query, result = db.unwind()
