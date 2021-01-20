@@ -3,10 +3,9 @@
     -----------------------------------------
     Curso: Bases de datos avanzadas
     Profesor: Vicente Cubells Nonell
-    Equipo 5
-    Integrantes:
+    Equipo 5:
+        Daniela Vignau León (A01021698)
         Cristopher Alan Cejudo Machuca (A01025468)
-        Daniela Vignau León (A01021698) 
         Héctor Alexis Reyes Manrique (A01339607)
 """
 
