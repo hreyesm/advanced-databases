@@ -47,7 +47,7 @@ def print_results(query, result):
         "------- QUERY -------\n",
         json.dumps(query, indent=1, default=json_util.default),
     )
-    print("\n------ RESULTADO ------\n", json.dumps(result, indent=1))
+    print("\n------ RESULTADO ------\n", json.dumps(result, indent=1, default=str))
 
 
 if __name__ == "__main__":
