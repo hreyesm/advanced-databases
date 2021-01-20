@@ -3,7 +3,7 @@
 ### Equipo 5
 
 - [Daniela Vignau León (A01021698)](https://github.com/dvigleo)
-- [Cristopher Alan Cejudo Machuca (A01025468)](https://github.com/CristopherCM)
+- [Cristopher Alan Cejudo Machuca (A01025468)](https://github.com/ccejudo)
 - [Héctor Alexis Reyes Manrique (A01339607)](https://github.com/hreyesm)
 
 ## Contenido
