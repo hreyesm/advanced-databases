@@ -226,6 +226,78 @@ Obtener el promedio de likes de los 10 posts con más likes asociados con el has
 
 #### Descripción
 
+Obtener para los usuarios con dominios de correo '@elitpretium.edu', '@Nullamsuscipit.edu' y '@eu.net':
+            1. Categorización por likes de los posts de los usuarios del grupo ITC (4 grupos)
+            2. Categorización por likes de los posts de los usuarios del grupo SATI (5 grupos)
+            3. Posts del grupo Lost & Found publicados después de la fecha 2020-01-01
+            4. Posts del grupo Becarios ordenado por número de likes descendentemente
+
 #### Pipeline
+```json
+[
+   {
+      "$match":{
+         "$or":[
+            {"email":{"$regex":".+@elitpretium.edu"}},
+            {"email":{"$regex":".+@Nullamsuscipit.edu"}},
+            {"email":{"$regex":".+@eu.net"}}
+         ]
+      }
+   },
+   {
+      "$lookup":{
+         "from":"posts",
+         "localField":"_id",
+         "foreignField":"user",
+         "as":"post"
+      }
+   },
+   {
+      "$unwind":{"path":"$groups"}
+   },
+   {
+      "$facet":{
+         "group-ITC":[
+            {"$match":{"groups":"ITC"}},
+            {"$unwind":{"path":"$post"}},
+            {
+               "$bucketAuto":{
+                  "groupBy":"$post.likes",
+                  "buckets":4
+               }
+            }
+         ],
+         "group-SATI":[
+            {"$match":{"groups":"SATI"}},
+            {"$unwind":{"path":"$post"}},
+            {
+               "$bucketAuto":{
+                  "groupBy":"$post.likes",
+                  "buckets":5
+               }
+            }
+         ],
+         "group-Lost&Found":[
+            {"$match":{"groups":"Lost & Found"}},
+            {"$unwind":{"path":"$post"}},
+            {"$match":{"post.date":{"$gte": ISODate(2020-01-01)}}}
+         ],
+         "group-Becarios":[
+            {"$match":{"groups":"Becarios"}},
+            {"$unwind":{"path":"$post"}},
+            {"$sort":{"post.likes":-1}}
+         ]
+      }
+   }
+]
+```
 
 #### Etapas
+- match: Encuentra los usuarios con los dominios de correos indicados, haciendo uso de expresiones regulares
+- lookup: Realiza la unión de usuarios con sus respectivos posts
+- unwind: Separa los usuarios con los grupos que pertece respectivamente
+- facet: Realiza un pipeline para cada uno de los 4 requerimientos
+  - group-ITC: Agrupa a los usuarios que pertecen al grupo ITC y realiza una categorización de 4 grupos según el número de likes de todos los posts
+  - group-SATI: Agrupa a los usuarios que pertecen al grupo SATI y realiza una categorización de 5 grupos según el número de likes de todos los posts
+  - group-Lost&Found: Agrupa a los usuarios que pertecen al grupo Lost & Found y muestra únicamente los posts publicados después de la fecha 2020-01-01
+  - group-Becarios: Agrupa a los usuarios que pertecen al grupo Becarios y ordena todos los posts de manera descendente según el número de likes
