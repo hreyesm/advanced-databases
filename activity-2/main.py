@@ -1,5 +1,17 @@
-from database import *
+"""
+    Actividad 2: Bases de datos de documentos
+    -----------------------------------------
+    Curso: Bases de datos avanzadas
+    Profesor: Vicente Cubells Nonnell
+    Equipo 5
+    Integrantes
+        Cristopher Alan Cejudo Machuca (A01025468)
+        Daniela Vignau León (A01021698) 
+        Héctor Alexis Reyes Manrique (A01339607)
+"""
+
 from bson import json_util
+from database import *
 import json
 
 db = Database()
