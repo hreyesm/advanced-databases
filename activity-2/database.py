@@ -2,9 +2,9 @@
     Actividad 2: Bases de datos de documentos
     -----------------------------------------
     Curso: Bases de datos avanzadas
-    Profesor: Vicente Cubells Nonnell
+    Profesor: Vicente Cubells Nonell
     Equipo 5
-    Integrantes
+    Integrantes:
         Cristopher Alan Cejudo Machuca (A01025468)
         Daniela Vignau León (A01021698) 
         Héctor Alexis Reyes Manrique (A01339607)
@@ -18,11 +18,12 @@ import pymongo
 load_dotenv()
 url = os.getenv("mongo_url")
 
+
 class Database:
     def __init__(self):
         self.client = pymongo.MongoClient(url)
         self.db = self.client.actividad2
-    
+
     def unwind(self):
         """
         Obtener, en orden descendente, la cantidad de personas de nombre "Murphy" que están inscritas por grupo.
@@ -33,32 +34,16 @@ class Database:
             - sort: Ordena los resultados de manera descendente
         """
         query = [
-            {
-                '$match': {
-                    'name': 'Murphy'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$groups'
-                }
-            }, {
-                '$group': {
-                    '_id': '$groups', 
-                    'enrolled': {
-                        '$sum': 1
-                    }
-                }
-            }, {
-                '$sort': {
-                    'enrolled': -1
-                }
-            }
+            {"$match": {"name": "Murphy"}},
+            {"$unwind": {"path": "$groups"}},
+            {"$group": {"_id": "$groups", "enrolled": {"$sum": 1}}},
+            {"$sort": {"enrolled": -1}},
         ]
-        users = self.db['users']
+        users = self.db["users"]
         unwind = users.aggregate(query)
         self.client.close()
         return query, list(unwind)
-    
+
     def lookup(self):
         """
         Obtener el promedio de likes de los 10 posts con más likes asociados con el hashtag "semper".
@@ -73,54 +58,35 @@ class Database:
         """
         query = [
             {
-                '$lookup': {
-                    'from': 'hashtags', 
-                    'localField': 'hashtag', 
-                    'foreignField': '_id', 
-                    'as': 'hashtagInfo'
+                "$lookup": {
+                    "from": "hashtags",
+                    "localField": "hashtag",
+                    "foreignField": "_id",
+                    "as": "hashtagInfo",
                 }
-            }, {
-                '$replaceRoot': {
-                    'newRoot': {
-                        '$mergeObjects': [
-                            {
-                                '$arrayElemAt': [
-                                    '$hashtagInfo', 0
-                                ]
-                            }, '$$ROOT'
+            },
+            {
+                "$replaceRoot": {
+                    "newRoot": {
+                        "$mergeObjects": [
+                            {"$arrayElemAt": ["$hashtagInfo", 0]},
+                            "$$ROOT",
                         ]
                     }
                 }
-            }, {
-                '$match': {
-                    'name': 'semper'
-                }
-            }, {
-                '$sort': {
-                    'likes': -1
-                }
-            }, {
-                '$limit': 10
-            }, {
-                '$group': {
-                    '_id': '$name', 
-                    'averageLikes': {
-                        '$avg': '$likes'
-                    }
-                }
-            }, {
-                '$project': {
-                    '_id': 0, 
-                    'averageLikes': 1
-                }
-            }
+            },
+            {"$match": {"name": "semper"}},
+            {"$sort": {"likes": -1}},
+            {"$limit": 10},
+            {"$group": {"_id": "$name", "averageLikes": {"$avg": "$likes"}}},
+            {"$project": {"_id": 0, "averageLikes": 1}},
         ]
-        posts = self.db['posts']
+        posts = self.db["posts"]
         lookup = posts.aggregate(query)
         self.client.close()
         return query, list(lookup)
-    
-    def graphLookup(self):
+
+    def graph_lookup(self):
         """
         Obtener el número total de likes de los posts cuyo autor sea amigo mutuo del usuario con email "quis.diam.luctus@ultricies.net" con mayor número de likes acumulados entre sus posts.
         Etapas:
@@ -136,67 +102,40 @@ class Database:
             - project: Muestra únicamente la suma
         """
         query = [
+            {"$match": {"email": "quis.diam.luctus@ultricies.net"}},
             {
-                '$match': {
-                    'email': 'quis.diam.luctus@ultricies.net'
+                "$graphLookup": {
+                    "from": "users",
+                    "startWith": "$friends",
+                    "connectFromField": "friends",
+                    "connectToField": "name",
+                    "as": "ITCs",
+                    "maxDepth": 2,
+                    "restrictSearchWithMatch": {"groups": "ITC", "friends": "Marah"},
                 }
-            }, {
-                '$graphLookup': {
-                    'from': 'users', 
-                    'startWith': '$friends', 
-                    'connectFromField': 'friends', 
-                    'connectToField': 'name', 
-                    'as': 'ITCs', 
-                    'maxDepth': 2, 
-                    'restrictSearchWithMatch': {
-                        'groups': 'ITC',
-                        'friends': 'Marah'
-                    }
+            },
+            {"$project": {"connections": "$ITCs._id"}},
+            {"$unwind": {"path": "$connections"}},
+            {
+                "$lookup": {
+                    "from": "posts",
+                    "localField": "connections",
+                    "foreignField": "user",
+                    "as": "postInfo",
                 }
-            }, {
-                '$project': {
-                    'connections': '$ITCs._id'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$connections'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'posts', 
-                    'localField': 'connections', 
-                    'foreignField': 'user', 
-                    'as': 'postInfo'
-                }
-            }, {
-                '$sort': {
-                    'postInfo.likes': -1
-                }
-            }, {
-                '$limit': 1
-            }, {
-                '$unwind': {
-                    'path': '$postInfo'
-                }
-            }, {
-                '$group': {
-                    '_id': None, 
-                    'totalLikes': {
-                        '$sum': '$postInfo.likes'
-                    }
-                }
-            }, {
-                '$project': {
-                    '_id': 0
-                }
-            }
+            },
+            {"$sort": {"postInfo.likes": -1}},
+            {"$limit": 1},
+            {"$unwind": {"path": "$postInfo"}},
+            {"$group": {"_id": None, "totalLikes": {"$sum": "$postInfo.likes"}}},
+            {"$project": {"_id": 0}},
         ]
-        users = self.db['users']
-        graphLookup = users.aggregate(query)
+        users = self.db["users"]
+        graph_lookup = users.aggregate(query)
         self.client.close()
-        return query, list(graphLookup)
-    
-    def geoNear(self):
+        return query, list(graph_lookup)
+
+    def geo_near(self):
         """
         Obtener la distancia promedio que existe a partir de la coordenada [-77.73, -5.71] tomando como referencia los 56 posts con mayor distancia del punto original cuya fecha de publicación está entre '2021-01-01' y '2020-06-01' y que tienen más de 950 likes.
         Etapas:
@@ -209,49 +148,29 @@ class Database:
         """
         query = [
             {
-                '$geoNear': {
-                    'near': {
-                        'type': 'Point', 
-                        'coordinates': [
-                            -77.73, -5.71
-                        ]
-                    }, 
-                    'distanceField': 'distance'
+                "$geoNear": {
+                    "near": {"type": "Point", "coordinates": [-77.73, -5.71]},
+                    "distanceField": "distance",
                 }
-            }, {
-                '$match': {
-                    'date': {
-                        '$lt': datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc), 
-                        '$gte': datetime(2020, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
-                    }, 
-                    'likes': {
-                        '$gt': 950
-                    }
+            },
+            {
+                "$match": {
+                    "date": {
+                        "$lt": datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
+                        "$gte": datetime(2020, 6, 1, 0, 0, 0, tzinfo=timezone.utc),
+                    },
+                    "likes": {"$gt": 950},
                 }
-            }, {
-                '$sort': {
-                    'distance': 1
-                }
-            }, {
-                '$skip': 50
-            }, {
-                '$group': {
-                    '_id': 'distance', 
-                    'averageDistance': {
-                        '$avg': '$distance'
-                    }
-                }
-            }, {
-                '$project': {
-                    '_id': 0, 
-                    'averageDistance': 1
-                }
-            }
+            },
+            {"$sort": {"distance": 1}},
+            {"$skip": 50},
+            {"$group": {"_id": "distance", "averageDistance": {"$avg": "$distance"}}},
+            {"$project": {"_id": 0, "averageDistance": 1}},
         ]
-        posts = self.db['posts']
-        geoNear = posts.aggregate(query)
+        posts = self.db["posts"]
+        geo_near = posts.aggregate(query)
         self.client.close()
-        return query, list(geoNear)
-    
+        return query, list(geo_near)
+
     def facet(self):
         print("PENDING")
