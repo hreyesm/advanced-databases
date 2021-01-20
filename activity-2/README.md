@@ -130,7 +130,7 @@ Obtener el promedio de likes de los 10 posts con más likes asociados con el has
 
 #### Descripción
 
-Obtener el promedio de likes de los 10 posts con más likes asociados con el hashtag "semper".
+Obtener el número total de likes de los posts cuyo autor sea amigo mutuo del usuario con email "quis.diam.luctus@ultricies.net" con mayor número de likes acumulados entre sus posts.
 
 #### Pipeline
 
@@ -183,7 +183,7 @@ Obtener el promedio de likes de los 10 posts con más likes asociados con el has
 
 #### Descripción
 
-Obtener el promedio de likes de los 10 posts con más likes asociados con el hashtag "semper".
+Obtener la distancia promedio que existe a partir de la coordenada [-77.73, -5.71] tomando como referencia los 56 posts con mayor distancia del punto original cuya fecha de publicación está entre '2021-01-01' y '2020-06-01' y que tienen más de 950 likes.
 
 #### Pipeline
 
