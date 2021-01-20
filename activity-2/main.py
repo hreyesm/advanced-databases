@@ -3,10 +3,9 @@
     -----------------------------------------
     Curso: Bases de datos avanzadas
     Profesor: Vicente Cubells Nonell
-    Equipo 5
-    Integrantes:
-        Cristopher Alan Cejudo Machuca (A01025468)
+    Equipo 5:
         Daniela Vignau León (A01021698)
+        Cristopher Alan Cejudo Machuca (A01025468)
         Héctor Alexis Reyes Manrique (A01339607)
 """
 
@@ -23,7 +22,7 @@ def main():
         try:
             option = int(
                 input(
-                    "\nSeleccione una query a ejecutar (1-5):\n\t1. unwind\n\t2. lookup\n\t3. graphLookup\n\t4. geoNear\n\t5. facet\nIntroduzca -1 para salir\n"
+                    "\nSeleccione una consulta a ejecutar (1-5):\n\t1. unwind\n\t2. lookup\n\t3. graphLookup\n\t4. geoNear\n\t5. facet\nIntroduzca -1 para salir\n"
                 )
             )
             if option == 1:
