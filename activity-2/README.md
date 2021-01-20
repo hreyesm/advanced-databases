@@ -8,9 +8,6 @@
 
 ## Contenido
 
-- [Actividad 2. Bases de datos de documentos](#actividad-2-bases-de-datos-de-documentos)
-    - [Equipo 5](#equipo-5)
-  - [Contenido](#contenido)
   - [Descripción del problema](#descripción-del-problema)
   - [Definición de la base de datos](#definición-de-la-base-de-datos)
     - [Patrón de modelado](#patrón-de-modelado)
