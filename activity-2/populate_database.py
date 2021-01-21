@@ -1,3 +1,14 @@
+"""
+    Actividad 2: Bases de datos de documentos
+    -----------------------------------------
+    Curso: Bases de datos avanzadas
+    Profesor: Vicente Cubells Nonell
+    Equipo 5:
+        Daniela Vignau León (A01021698)
+        Cristopher Alan Cejudo Machuca (A01025468)
+        Héctor Alexis Reyes Manrique (A01339607)
+"""
+
 import json
 import os
 import pymongo
@@ -7,25 +18,30 @@ from dotenv import load_dotenv
 load_dotenv()
 url = os.getenv("mongo_url")
 
+#Conexión a Mongo
 client = pymongo.MongoClient(url)
 db = client.actividad2
 
-with open('users.json') as u:
+#Carga de archivos json
+with open('./data/users.json') as u:
     users_data = json.load(u)
 
-with open('posts.json') as p:
+with open('./data/posts.json') as p:
     posts_data = json.load(p)
 
-with open('hashtags.json') as h:
+with open('./data/hashtags.json') as h:
     hashtags_data = json.load(h)
 
+#Collecciones creadas
 collection_users = db['users']
 collection_posts = db['posts']
 collection_hashtags = db['hashtags']
 
+#Ciclo para insertar fechas en formato correcto
 for element in posts_data:
     element['date'] = datetime.datetime.strptime(element['date'], "%Y-%m-%dT%H:%M:%S%fZ")
 
+#Inserción de datos
 print('Starting database population. This may take a while...')
 try:
     collection_users.insert_many(users_data)
@@ -39,10 +55,12 @@ except:
 
 print('Creating indexes...')
 
+#Creación de index
 try:
-    collection_posts.create_index([('coordinates', pymongo.GEO2D)])
+    collection_posts.create_index([('coordinates', pymongo.GEOSPHERE)])
     print('2D Sphere index created')
 except:
     print('something happened while creating index')
 
+#Fin de conexión
 client.close()
