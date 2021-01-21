@@ -34,7 +34,7 @@ Al tratarse de tres colecciones distintas, la entidad _posts_ actúa como víncu
 
 1. Clonar el repositorio `https://github.com/tec-csf/tc3041-actividad-2-invierno-2021-eq5`
 2. Ejecutar el comando `pip install -r requirements.txt`
-3. Crear un archivo `.env` y almacenar la cadena de conección SRV del clúster en una variable llamada `mongo_url`
+3. Crear un archivo `.env` y almacenar la cadena de conexión SRV del clúster en una variable llamada `mongo_url`
 4. Ejecutar el comando `python3 populate_database.py` para crear la base de datos y poblar sus colecciones
 5. Ejecutar el comando `python3 main.py` para correr el programa principal y ejecutar las consultas
 
