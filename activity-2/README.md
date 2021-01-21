@@ -8,7 +8,6 @@
 
 ## Contenido
 
-  - [Contenido](#contenido)
   - [Descripción del problema](#descripción-del-problema)
   - [Definición de la base de datos](#definición-de-la-base-de-datos)
   - [Configuración y uso](#configuración-y-uso)
