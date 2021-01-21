@@ -1,6 +1,7 @@
 import json
 import os
 import pymongo
+import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,6 +23,9 @@ collection_users = db['users']
 collection_posts = db['posts']
 collection_hashtags = db['hashtags']
 
+for element in posts_data:
+    element['date'] = datetime.datetime.strptime(element['date'], "%Y-%m-%dT%H:%M:%S%fZ")
+
 print('Starting database population. This may take a while...')
 try:
     collection_users.insert_many(users_data)
@@ -32,5 +36,13 @@ try:
     print('hashtags succesfully added')
 except:
     print('something happened while inserting documents')
+
+print('Creating indexes...')
+
+try:
+    collection_posts.create_index([('coordinates', pymongo.GEO2D)])
+    print('2D Sphere index created')
+except:
+    print('something happened while creating index')
 
 client.close()

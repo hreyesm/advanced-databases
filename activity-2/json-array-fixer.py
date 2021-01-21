@@ -9,7 +9,7 @@ a_file.close()
 
 #operation
 for element in json_object:
-    element['date'] = 'ISODate(' + element['date']['$date'] +')'
+    element['date'] = 'ISODate("' + element['date']['$date'] +'")'
 
 a_file = open(curr_file, "w")
 json.dump(json_object, a_file)
