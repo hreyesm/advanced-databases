@@ -1,7 +1,7 @@
 import json
 import random
 
-curr_file = "users.json"
+curr_file = "posts.json"
 
 a_file = open(curr_file, "r")
 json_object = json.load(a_file)
@@ -9,7 +9,7 @@ a_file.close()
 
 #operation
 for element in json_object:
-    element['friends'] = [json_object[random.randint(0,99999)]['name'],json_object[random.randint(0,99999)]['name'], json_object[random.randint(0,99999)]['name'], json_object[random.randint(0,99999)]['name']]
+    element['date'] = 'ISODate(' + element['date']['$date'] +')'
 
 a_file = open(curr_file, "w")
 json.dump(json_object, a_file)
