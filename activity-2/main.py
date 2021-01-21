@@ -38,7 +38,7 @@ def main():
             if option != -1:
                 print_results(query, result)
         except:
-            print("Por favor seleccione una opción válida")
+            print("Hubo un problema. Por favor seleccione una opción válida")
 
 
 def print_results(query, result):
