@@ -29,6 +29,5 @@ class Database:
         db = 'neo4j'
         session = self.driver.session(database=db) 
         response = list(session.run(query))
-        
         session.close()
         return response

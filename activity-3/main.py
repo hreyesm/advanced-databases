@@ -18,15 +18,13 @@ def main():
         try:
             option = int(input("\nSeleccione una consulta a ejecutar (1-3):\n\t1.----\n\t2.----\n\t3.----\nIntroduzca -1 para salir\n"))
             if option == 1:
-                query = '''\tMATCH (n:Movie)\n\tRETURN count(n)\n'''
-                res = db.run(query)
+                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
             elif option == 2:
-                query = '''\tMATCH (n:Movie)\n\tRETURN count(n)\n'''
-                res = db.run(query)
+                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
             elif option == 3:
-                query = '''\tMATCH (n:Movie)\n\tRETURN count(n)\n'''
-                res = db.run(query)  
+                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
             if option != -1:
+                res = db.run(query)  
                 print_response(query, res)
                 db.close()
         except:
