@@ -1,6 +1,6 @@
 """
     Actividad 3: Bases de datos de grafos
-    -----------------------------------------
+    -------------------------------------
     Curso: Bases de datos avanzadas
     Profesor: Vicente Cubells Nonell
     Equipo 5:
@@ -18,11 +18,11 @@ def main():
         try:
             option = int(input("\nSeleccione una consulta a ejecutar (1-3):\n\t1.----\n\t2.----\n\t3.----\nIntroduzca -1 para salir\n"))
             if option == 1:
-                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
+                query = "\tMATCH (n:Blade)\n\tRETURN count(n)\n"
             elif option == 2:
-                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
+                query = "\tMATCH (n:Zone)\n\tRETURN count(n)\n"
             elif option == 3:
-                query = "\tMATCH (n:Movie)\n\tRETURN count(n)\n"
+                query = "\tMATCH (n:Region)\n\tRETURN n\n"
             if option != -1:
                 res = db.run(query)  
                 print_response(query, res)
@@ -30,9 +30,9 @@ def main():
         except:
             print("Hubo un problema. Por favor seleccione una opción válida")
 
-def print_response(query, result):
+def print_response(query, res):
     print("\nQuery:\n", query)
-    print("Response:\n\t", result)
+    print("Response:\n\t", res)
 
 if __name__ == "__main__":
     main()
