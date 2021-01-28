@@ -15,13 +15,13 @@ from neo4j import GraphDatabase
 
 load_dotenv()
 url = os.getenv("neo4j_url")
-# user = os.getenv("user")
-# pwd = os.getenv("pwd")
+user = os.getenv("user")
+pwd = os.getenv("pwd")
 
 class Database:
     def __init__(self):
-        # self.driver = GraphDatabase.driver(url, auth=(user, pwd))
-        self.driver = GraphDatabase.driver(url)
+        self.driver = GraphDatabase.driver(url, auth=(user, pwd))
+        #self.driver = GraphDatabase.driver(url)
         
     def close(self):
         self.driver.close()

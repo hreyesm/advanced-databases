@@ -1,10 +1,7 @@
-file_name = "./data/soc-pokec-relationships.csv"
+file_name = "./data/soc-pokec-profiles.csv"
 
 with open(file_name, 'r') as fin:
-    data = fin.read().splitlines(False)
+    data = fin.read().splitlines(True)
 
-for i in range(1, len(data)):
-    data[i] = data[i]+',FRIENDS_WITH\n'
-
-with open(file_name + 'new', 'w') as fout:
-    fout.writelines(data[1:])
+with open('soc-pokec-profiles1.csv', 'w') as fout1:
+    fout1.writelines(data[:10000])

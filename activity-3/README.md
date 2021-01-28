@@ -42,3 +42,29 @@ $ bin/neo4j-admin import \
 6. Una vez importados los datos, se podrá ejecutar el comando ```python3 main.py``` para correr el programa principal y ejecutar las consultas
 
 ## Consultas
+1. Obtener el número de amigos que tienen en común dos personas
+
+```
+MATCH (p1:Profile {userID: '3'})
+MATCH (p2:Profile {userID: '2'})
+RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
+```
+Resultados
+
+2. Obtener el userID, género y edad de las personas que trabajan en la misma área y que se encuentran a una distancia de 2 a 3 nodos de distancia.
+
+```
+MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
+WHERE p.I_am_working_in_field = q.I_am_working_in_field
+RETURN q.userID, q.gender, q.AGE
+```
+Resultados
+
+3. Obtener el numero de personas que tienen una relación de amistad mútua, que tienen un perfil público y que tengan la misma edad
+
+```
+MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
+WHERE n.public = '1' and n.AGE = m.AGE
+RETURN COUNT (*)
+```
+Resultados
