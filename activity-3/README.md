@@ -1,4 +1,4 @@
-# Actividad 3. Bases de datos de grafos
+# Actividad 3. Bases de datos orientadas a grafos
 
 ### Equipo 5
 
@@ -8,40 +8,33 @@
 
 ## Contenido
 
-  - [Contenido](#contenido)
-  - [Descripción del problema](#descripción-del-problema)
-  - [Definición de la base de datos](#definición-de-la-base-de-datos)
-  - [Configuración y uso](#configuración-y-uso)
-  - [Consultas](#consultas)
-
+- [Contenido](#contenido)
+- [Descripción del problema](#descripción-del-problema)
+- [Definición de la base de datos](#definición-de-la-base-de-datos)
+- [Configuración y uso](#configuración-y-uso)
+- [Consultas](#consultas)
 
 ## Descripción del problema
 
-Haciendo uso del DBMS no relacional Neo4j, se programó un script en Python para poder ejecutar 3 distintas queries sobre la base de datos de _Pokec_. Pokec es la red social más popular de Eslovaquia.
-El dataset descargado contiene 1,632,803 nodos y 30,622,564 aristas que describen las relaciones de amistad que tienen dos usuarios que además, a su vez, tienen un conjunto de atributos (59).
+Utilizando el DBMS orientado a grafos Neo4j, se programó un script en Python para poder ejecutar tres consultas distintas sobre el dataset [soc-pokec](https://snap.stanford.edu/data/soc-pokec.html), del proyecto [SNAP](https://snap.stanford.edu/snap/). Pokec es la red social más popular en Eslovaquia.
+El dataset en cuestión contiene 1,632,803 nodos (_Profiles_) y 30,622,564 aristas (_Relationships_) que describen las relaciones amistosas entre usuarios, cada uno de los cuales tiene un conjunto de 59 atributos.
 
 ## Definición de la base de datos
 
+Schema
 
-## Configuración y uso
-1. Clonar el repositorio ```https://github.com/tec-csf/tc3041-actividad-3-invierno-2021-eq5.git```
-2. Crear un contenedor de Docker con la imagen de Neo4j
-```
-docker run --name=neo4j -m=4g --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data --volume=$HOME/neo4j/import:/import     --env=NEO4J_AUTH=none neo4j
-```
-3. Una vez creado el contenedor, acceder al URL http://localhost:7474
-4. Crear un archivo ```.env``` y almacenar el URL con la ubicación de la conexión a la base de datos
-5. *En la aplicación de Neo4j Desktop ejecutar el siguiente comando para cargar la base de datos:
-```
-$ bin/neo4j-admin import \
---mode csv \
---database neo4j \
---nodes nodes-header.csv,new-soc-pokec-profiles.csv \
---relationships relation-header.csv,new-soc-pokec-relationships.csv
-```
-6. Una vez importados los datos, se podrá ejecutar el comando ```python3 main.py``` para correr el programa principal y ejecutar las consultas
+## Solución
+
+El primer paso para la solución del problema fue convertir los datasets, que eran de tipo `.txt`, a archivos `.csv` junto con sus propiedades (headers) correspondientes.
+
+Para facilitar la inserción de datos, se decidió dividir el archivo con las relaciones en 3 distintos nuevos.
+
+- Haciendo uso de neo4j desktop, se ejecutó el comando `LOAD CSV` para añadir los nodos junto con sus relaciones
+
+- Ejecutaron las queries
 
 ## Consultas
+
 1. Obtener el número de amigos que tienen en común dos personas
 
 ```
@@ -49,15 +42,17 @@ MATCH (p1:Profile {userID: '3'})
 MATCH (p2:Profile {userID: '2'})
 RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
 ```
+
 Resultados
 
 2. Obtener el userID, género y edad de las personas que trabajan en la misma área y que se encuentran a una distancia de 2 a 3 nodos de distancia.
 
-```
-MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
-WHERE p.I_am_working_in_field = q.I_am_working_in_field
-RETURN q.userID, q.gender, q.AGE
-```
+   ```
+   MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
+   WHERE p.I_am_working_in_field = q.I_am_working_in_field
+   RETURN q.userID, q.gender, q.AGE
+   ```
+
 Resultados
 
 3. Obtener el numero de personas que tienen una relación de amistad mútua, que tienen un perfil público y que tengan la misma edad
@@ -67,4 +62,5 @@ MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
 WHERE n.public = '1' and n.AGE = m.AGE
 RETURN COUNT (*)
 ```
+
 Resultados
