@@ -189,7 +189,7 @@ RETURN q.userID, q.gender, q.AGE
 
 **Descripción**
 
-Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público, tienen la misma edad, y el _userID_ se mantiene debajo de 10. Esto último con el objetivo de minimizar el tiempo de ejecución.
+Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público, tienen la misma edad, y el _userID_ se mantiene debajo de 10. Éste último criterio se definió con el objetivo de minimizar el tiempo de ejecución.
 
 **Comando**
 
