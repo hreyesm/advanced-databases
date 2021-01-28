@@ -22,21 +22,21 @@
 
 ## Descripción del problema
 
-Utilizando el DBMS orientado a grafos Neo4j, se programó un script en Python para ejecutar tres consultas diferentes en una base de datos modelada a partir de [_soc-pokec_](https://snap.stanford.edu/data/soc-pokec.html), un dataset del proyecto [SNAP](https://snap.stanford.edu/snap/). Pokec es la red social más popular de Eslovaquia.
+Utilizando el DBMS orientado a grafos Neo4j, se programó un script en Python para ejecutar tres consultas diferentes en una base de datos modelada a partir de [_soc-pokec_](https://snap.stanford.edu/data/soc-pokec.html), un dataset del proyecto [SNAP](https://snap.stanford.edu/snap/).
 
 ## Definición de la base de datos
 
 ### Dataset
 
-El dataset _soc-pokec_ contiene 1,632,803 nodos (perfiles) y 30,622,564 aristas (relaciones) que describen las relaciones amistosas entre usuarios, cada uno de los cuales tiene un conjunto de 59 atributos. Los perfiles y las relaciones entre ellos están definidas en los archivos [soc-pokec-profiles.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz) y [soc-pokec-relationships.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz), respectivamente.
+Pokec es la red social más popular de Eslovaquia. El dataset _soc-pokec_ contiene 1,632,803 nodos (perfiles) y 30,622,564 aristas (relaciones) que describen las relaciones amistosas entre usuarios, cada uno de los cuales tiene un conjunto de 59 atributos. Los perfiles y las relaciones entre ellos están definidas en los archivos [soc-pokec-profiles.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz) y [soc-pokec-relationships.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz), respectivamente.
 
 #### _soc-pokec-profiles_
 
-El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios. Algunos ejemplos de ellas son: user_id, last_login, age, eye_color, politics, etcétera.
+El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios. Algunos ejemplos de atributos son _user_id_, _last_login_, _age_, _eye_color_ y _politics_.
 
 #### _soc-pokec-relationships_
 
-El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro; por ejemplo, el renglón `1 6` indica la amistad que tiene el usuario 1 con el 6 y, tal como se puede ver, las relaciones de amistad son dirigidas.
+El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro. Por ejemplo, la fila con _start_id_ = 1 y _end_id_ = 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id 6., lo que significa que las relaciones de amistad son dirigidas.
 
 ### Esquema de la base de datos
 
@@ -56,20 +56,20 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
 
 ### Implementación de la base de datos
 
-1. Desde la aplicación Neo4j Desktop, crear un proyecto y una base de datos con el nombre de «Pokec»
-2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de vecinos comunes
-3. Encender la base de datos y acceder al _desktop_ de Neo4j.
-4. Ejectuar el primer comando que existe en el archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
-5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la incersión de relaciones.
+1. Desde la aplicación Neo4j Desktop, crear un proyecto y una base de datos con el nombre de «Pokec».
+2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de vecinos comunes.
+3. Inicializar la base de datos y acceder a Neo4j Browser.
+4. Ejectuar el primer comando del archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
+5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la inserción de relaciones.
 6. Ejecutar los siguientes tres comandos del archivo [populate_database.cypher](./populate_database.cypher) para cargar las relaciones.
 
-_Nota:_ Es imporante esperar a que cada uno de los comandos se terminen de ejecutar para ejecutar el siguiente.
+_Nota:_ Es imporante esperar a que cada comando termine de ejecutarse para ejecutar el siguiente.
 
 ### Ejecución de consultas
 
-Una vez que estén insertados los datos y la base de datos esté prendida, se deberán de implementar los siguientes pasos
+Una vez que se han insertado los datos y se ha inicializado la base de datos, se deberán implementar los siguientes pasos:
 
-1. Crear un archivo `.env` y almacenar, en distintas variables, el URL de conexión, usuario y contraseña necesarios para poder conectarse a la base de datos con el driver de Neo4j para Python.
+1. Crear un archivo `.env` y almacenar, en diferentes variables, la URL de conexión, el nombre de usuario y la contraseña necesarios para poder conectarse a la base de datos con el driver de Neo4j para Python.
 2. Ejecutar el comando `python3 main.py` para comenzar a ejecutar las consultas.
 
 ## Consultas
@@ -78,7 +78,7 @@ Una vez que estén insertados los datos y la base de datos esté prendida, se de
 
 **Descripción**
 
-Obtener la cantidad de amigos que tienen dos usuarios en común [HACER MÁS DESCRIPTIVO]
+Obtener el número de amigos que los usuarios con _userID_ 2 y 3 tienen en común. [HACER MÁS DESCRIPTIVO]
 
 **Comando**
 
@@ -96,7 +96,7 @@ Obtener la cantidad de amigos que tienen dos usuarios en común [HACER MÁS DESC
 
 **Descripción**
 
-Obtener los atributos "userID", "gender" y "AGE" de las personas que trabajan en el mismo campo y que tienen una distancia de 2 a 3 conexiones con respecto al usuario con userID "1"
+Obtener los atributos _userID_, _gender_ y _AGE_ de los usuarios que trabajan en el mismo campo y que tienen una distancia de 2 a 3 conexiones con respecto al usuario con _userID_ 1.
 
 **Comando**
 
@@ -114,7 +114,7 @@ Obtener los atributos "userID", "gender" y "AGE" de las personas que trabajan en
 
 **Descripción**
 
-Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad
+Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad.
 
 **Comando**
 
