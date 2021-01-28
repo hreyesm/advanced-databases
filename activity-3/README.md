@@ -8,16 +8,17 @@
 
 ## Contenido
 
-  - [Descripción del problema](#descripción-del-problema)
-  - [Definición de la base de datos](#definición-de-la-base-de-datos)
-    - [Dataset](#dataset)
-      - [_soc-pokec-profiles_](#soc-pokec-profiles)
-      - [_soc-pokec-relationships_](#soc-pokec-relationships)
-    - [Esquema de la base de datos](#esquema-de-la-base-de-datos)
-  - [Solución](#solución)
-    - [Preparación de archivos](#preparación-de-archivos)
-    - [Implementación de la base de datos](#implementación-de-la-base-de-datos)
-  - [Consultas](#consultas)
+- [Descripción del problema](#descripción-del-problema)
+- [Definición de la base de datos](#definición-de-la-base-de-datos)
+  - [Dataset](#dataset)
+    - [_soc-pokec-profiles_](#soc-pokec-profiles)
+    - [_soc-pokec-relationships_](#soc-pokec-relationships)
+  - [Esquema de la base de datos](#esquema-de-la-base-de-datos)
+- [Solución](#solución)
+  - [Preparación de archivos](#preparación-de-archivos)
+  - [Implementación de la base de datos](#implementación-de-la-base-de-datos)
+  - [Ejecución de consultas](#ejecucion-de-consultas)
+- [Consultas](#consultas)
 
 ## Descripción del problema
 
@@ -31,11 +32,11 @@ El dataset _soc-pokec_ contiene 1,632,803 nodos (perfiles) y 30,622,564 aristas 
 
 #### _soc-pokec-profiles_
 
-[DESCRIPCIÓN]
+El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios. Algunos ejemplos de ellas son: user_id, last_login, age, eye_color, politics, etcétera.
 
 #### _soc-pokec-relationships_
 
-[DESCRIPCIÓN]
+El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro; por ejemplo, el renglón `1 6` indica la amistad que tiene el usuario 1 con el 6 y, tal como se puede ver, las relaciones de amistad son dirigidas.
 
 ### Esquema de la base de datos
 
@@ -49,13 +50,27 @@ El primer paso para resolver el problema fue preparar ambos archivos del dataset
 
 Posteriormente, los archivos TXT resultantes fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea.
 
-Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes. Inicialmente se consideró ejecutar el script [populate_database.py](./txt_to_csv.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop.
+Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes. Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher).
 
 [DESCRIBIR UN POCO MÁS A DETALLE LA SEGMENTACIÓN DE LOS ARCHIVOS]
 
 ### Implementación de la base de datos
 
-[DESCRIBIR PASO A PASO LA CREACIÓN DE LA BASE DE DATOS Y LA INSERCIÓN DE REGISTROS]
+1. Usando la aplicación de escritorio de Neo4j, crear un proyecto y base de datos con el nombre de _Pokec_
+2. Instalar el plugin de [_Graph Data Science Library_](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación ya que es necesario para poder ejecutar una consulta.
+3. Encender la base de datos y acceder al _desktop_ de Neo4j.
+4. Ejectuar el primer comando que existe en el archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
+5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la incersión de relaciones.
+6. Ejecutar los siguientes tres comandos del archivo [populate_database.cypher](./populate_database.cypher) para cargar las relaciones.
+
+_Nota:_ Es imporante esperar a que cada uno de los comandos se terminen de ejecutar para ejecutar el siguiente.
+
+### Ejecución de consultas
+
+Una vez que estén insertados los datos y la base de datos esté prendida, se deberán de implementar los siguientes pasos
+
+1. Crear un archivo `.env` y almacenar, en distintas variables, el URL de conexión, usuario y contraseña necesarios para poder conectarse a la base de datos con el driver de Neo4j para Python.
+2. Ejecutar el comando `python3 main.py` para comenzar a ejecutar las consultas.
 
 ## Consultas
 
@@ -67,6 +82,8 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
    RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
    ```
 
+[IMAGEN]
+
 2. Obtener los atributos "userID", "gender" y "AGE" de las personas que trabajan en el mismo campo y que tienen una distancia de 2 a 3 conexiones con respecto al usuario con userID "1"
 
    ```
@@ -75,6 +92,8 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
    RETURN q.userID, q.gender, q.AGE
    ```
 
+[IMAGEN]
+
 3. Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad
 
    ```
@@ -82,3 +101,5 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
    WHERE n.public = '1' and n.AGE = m.AGE
    RETURN COUNT (*)
    ```
+
+[IMAGEN]
