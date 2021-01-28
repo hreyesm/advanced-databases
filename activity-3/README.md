@@ -106,9 +106,9 @@ temp: <string>
 
 #### _soc-pokec-relationships_
 
-El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro (FRIENDS*WITH). Por ejemplo, la fila con los atributos \_start_id* 1 y _end_id_ 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id_ 6, lo que significa que las relaciones de amistad son dirigidas.
+El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro (_FRIENDS_WITH_). Por ejemplo, la fila con los atributos _start_id_ 1 y _end_id_ 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id_ 6, lo que significa que las relaciones de amistad son dirigidas.
 
-A continuación se enlistan los atributos del tipo de relación FRIENDS_WITH:
+A continuación se enlistan los atributos del tipo de relación _FRIENDS_WITH_:
 
 ```
 start_id: <string>
@@ -127,7 +127,7 @@ El primer paso para resolver el problema fue preparar ambos archivos del dataset
 
 Posteriormente, los archivos TXT resultantes fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea.
 
-Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set-types.py): _soc-pokec-relationships1 (10 millones de registros)_, _soc-pokec-relationships2 (10 millones de registros)_ y _soc-pokec-relationships3 (10.6 millones de registros)_. Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
+Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set-types.py): _soc-pokec-relationships1_ (10 millones de registros), _soc-pokec-relationships2_ (10 millones de registros) y _soc-pokec-relationships3_ (10.6 millones de registros). Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
 
 ### Implementación de la base de datos
 
