@@ -60,7 +60,7 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
 ### Implementación de la base de datos
 
 1. Desde la aplicación Neo4j Desktop, crear un proyecto y una base de datos con el nombre de «Pokec».
-2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de vecinos comunes.
+2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de [vecinos comunes](https://neo4j.com/docs/graph-algorithms/current/labs-algorithms/common-neighbors/).
 3. Inicializar la base de datos y acceder a Neo4j Browser.
 4. Ejectuar el primer comando del archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
 5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la inserción de relaciones.
