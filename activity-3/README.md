@@ -33,6 +33,8 @@ Utilizando el DBMS orientado a grafos Neo4j, se programó un script en Python pa
 
 Pokec es la red social más popular de Eslovaquia. El dataset _soc-pokec_ contiene 1,632,803 nodos (perfiles) y 30,622,564 aristas (relaciones) que describen las relaciones amistosas entre usuarios, cada uno de los cuales tiene un conjunto de 59 atributos. Los perfiles y las relaciones entre ellos están definidas en los archivos [soc-pokec-profiles.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz) y [soc-pokec-relationships.txt](https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz), respectivamente.
 
+![DB](./images/population.png)
+
 #### _soc-pokec-profiles_
 
 El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios. Algunos ejemplos de atributos son _user_id_, _last_login_, _age_, _eye_color_ y _politics_.
@@ -43,7 +45,71 @@ El archivo está compuesto por 2 columnas, separadas por una tabulación, que de
 
 ### Esquema de la base de datos
 
-![Esquema](./images/schema.jpg)
+![Esquema](./images/schema.png)
+
+### Propiedades
+```
+user_id : <string>
+public : <string>
+completion_percentage: <string>
+gender: <string>
+region: <string>
+last_login: <string>
+registration: <string>
+AGE: <string>
+body: <string>
+I_am_working_in_field: <string>
+spoken_languages: <string>
+hobbies: <string>
+I_most_enjoy_good_food: <string>
+pets: <string>
+body_type: <string>
+my_eyesight: <string>
+eye_color: <string>
+hair_color: <string>
+hair_type: <string>
+completed_level_of_education: <string>
+favourite_color: <string>
+relation_to_smoking: <string>
+relation_to_alcohol: <string>
+sign_in_zodiac: <string>
+on_pokec_i_am_looking_for: <string>
+love_is_for_me: <string>
+relation_to_casual_sex: <string>
+my_partner_should_be: <string>
+marital_status: <string>
+children: <string>
+relation_to_children: <string>
+I_like_movies: <string>
+I_like_watching_movie: <string>
+I_like_music: <string>
+I_mostly_like_listening_to_music: <string>
+the_idea_of_good_evening: <string>
+I_like_specialties_from_kitchen: <string>
+fun: <string>
+I_am_going_to_concerts: <string>
+my_active_sports: <string>
+my_passive_sports: <string>
+profession: <string>
+I_like_books: <string>
+life_style: <string>
+music: <string>
+cars: <string>
+politics: <string>
+relationships: <string>
+art_culture: <string>
+hobbies_interests: <string>
+science_technologies: <string>
+computers_internet: <string>
+education: <string>
+sport: <string>
+movies: <string>
+travelling: <string>
+health: <string>
+companies_brands: <string>
+more: <string>
+temp: <string>
+```
 
 ## Solución
 
@@ -53,9 +119,7 @@ El primer paso para resolver el problema fue preparar ambos archivos del dataset
 
 Posteriormente, los archivos TXT resultantes fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea.
 
-Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes. Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher).
-
-[DESCRIBIR UN POCO MÁS A DETALLE LA SEGMENTACIÓN DE LOS ARCHIVOS]
+Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes: _soc-pokec-relationships1 (10 millones de registros)_, _soc-pokec-relationships2 (10 millones de registros)_ y _soc-pokec-relationships3 (10.6 millones de registros)_. Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
 
 ### Implementación de la base de datos
 
@@ -81,19 +145,19 @@ Una vez que se han insertado los datos y se ha inicializado la base de datos, se
 
 **Descripción**
 
-Obtener el número de amigos que los usuarios con _userID_ 2 y 3 tienen en común. [HACER MÁS DESCRIPTIVO]
+Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. [HACER MÁS DESCRIPTIVO]
 
 **Comando**
 
  ```
- MATCH (p1:Profile {userID: '3'})
+ MATCH (p1:Profile {userID: '16'})
  MATCH (p2:Profile {userID: '2'})
- RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
+ RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS Friends_In_Common
  ```
 
 **Resultados**
  
-![Consulta 1](./images/query-1.jpg)
+![Consulta 1](./images/query1.png)
 
 ### Consulta 2
 
@@ -111,7 +175,7 @@ Obtener los atributos _userID_, _gender_ y _AGE_ de los usuarios que trabajan en
 
 **Resultados**
 
-![Consulta 2](./images/query-2.jpg)
+![Consulta 2](./images/query2.png)
 
 ### Consulta 3
 
@@ -123,7 +187,7 @@ Obtener el número de usuarios que tienen una relación de amistad mutua, su per
 
  ```
  MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
- WHERE n.public = '1' and n.AGE = m.AGE
+ WHERE n.public = '1' and n.AGE = m.AGE and toInteger(n.userID) < 10
  RETURN COUNT (*)
  ```
  
