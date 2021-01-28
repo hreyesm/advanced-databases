@@ -40,7 +40,7 @@ El archivo está compuesto por 2 columnas, separadas por una tabulación, que de
 
 ### Esquema de la base de datos
 
-[IMAGEN]
+![Esquema](./images/schema.jpg)
 
 ## Solución
 
@@ -56,8 +56,8 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
 
 ### Implementación de la base de datos
 
-1. Usando la aplicación de escritorio de Neo4j, crear un proyecto y base de datos con el nombre de _Pokec_
-2. Instalar el plugin de [_Graph Data Science Library_](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación ya que es necesario para poder ejecutar una consulta.
+1. Desde la aplicación Neo4j Desktop, crear un proyecto y una base de datos con el nombre de «Pokec»
+2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de vecinos comunes
 3. Encender la base de datos y acceder al _desktop_ de Neo4j.
 4. Ejectuar el primer comando que existe en el archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
 5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la incersión de relaciones.
@@ -74,32 +74,56 @@ Una vez que estén insertados los datos y la base de datos esté prendida, se de
 
 ## Consultas
 
-1. Obtener la cantidad de amigos que tienen dos usuarios en común [HACER MÁS DESCRIPTIVO]
+### Consulta 1
 
-   ```
-   MATCH (p1:Profile {userID: '3'})
-   MATCH (p2:Profile {userID: '2'})
-   RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
-   ```
+**Descripción**
 
-[IMAGEN]
+Obtener la cantidad de amigos que tienen dos usuarios en común [HACER MÁS DESCRIPTIVO]
 
-2. Obtener los atributos "userID", "gender" y "AGE" de las personas que trabajan en el mismo campo y que tienen una distancia de 2 a 3 conexiones con respecto al usuario con userID "1"
+**Comando**
 
-   ```
-   MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
-   WHERE p.I_am_working_in_field = q.I_am_working_in_field
-   RETURN q.userID, q.gender, q.AGE
-   ```
+ ```
+ MATCH (p1:Profile {userID: '3'})
+ MATCH (p2:Profile {userID: '2'})
+ RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS score
+ ```
 
-[IMAGEN]
+**Resultados**
+ 
+![Consulta 1](./images/query-1.jpg)
 
-3. Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad
+### Consulta 2
 
-   ```
-   MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
-   WHERE n.public = '1' and n.AGE = m.AGE
-   RETURN COUNT (*)
-   ```
+**Descripción**
 
-[IMAGEN]
+Obtener los atributos "userID", "gender" y "AGE" de las personas que trabajan en el mismo campo y que tienen una distancia de 2 a 3 conexiones con respecto al usuario con userID "1"
+
+**Comando**
+
+ ```
+ MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
+ WHERE p.I_am_working_in_field = q.I_am_working_in_field
+ RETURN q.userID, q.gender, q.AGE
+ ```
+
+**Resultados**
+
+![Consulta 2](./images/query-2.jpg)
+
+### Consulta 3
+
+**Descripción**
+
+Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad
+
+**Comando**
+
+ ```
+ MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
+ WHERE n.public = '1' and n.AGE = m.AGE
+ RETURN COUNT (*)
+ ```
+ 
+ **Resultados**
+
+![Consulta 3](./images/query-3.jpg)
