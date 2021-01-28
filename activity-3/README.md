@@ -37,17 +37,10 @@ Pokec es la red social más popular de Eslovaquia. El dataset _soc-pokec_ contie
 
 #### _soc-pokec-profiles_
 
-El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios. Algunos ejemplos de atributos son _user_id_, _last_login_, _age_, _eye_color_ y _politics_.
+El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios.
 
-#### _soc-pokec-relationships_
+A continuación se enlistan los atributos del tipo de nodo _profile_:
 
-El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro. Por ejemplo, la fila con _start_id_ = 1 y _end_id_ = 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id 6., lo que significa que las relaciones de amistad son dirigidas.
-
-### Esquema de la base de datos
-
-![Esquema](./images/schema.png)
-
-### Propiedades
 ```
 user_id : <string>
 public : <string>
@@ -111,6 +104,21 @@ more: <string>
 temp: <string>
 ```
 
+#### _soc-pokec-relationships_
+
+El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro (_FRIENDS_WITH_). Por ejemplo, la fila con los atributos _start_id_ 1 y _end_id_ 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id_ 6, lo que significa que las relaciones de amistad son dirigidas.
+
+A continuación se enlistan los atributos del tipo de relación _FRIENDS_WITH_:
+
+```
+start_id: <string>
+end_id: <string>
+```
+
+### Esquema de la base de datos
+
+<p align=center><img width="50%" src="./images/schema.png"/></p>
+
 ## Solución
 
 ### Preparación de archivos
@@ -119,7 +127,7 @@ El primer paso para resolver el problema fue preparar ambos archivos del dataset
 
 Posteriormente, los archivos TXT resultantes fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea.
 
-Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set-types.py): _soc-pokec-relationships1 (10 millones de registros)_, _soc-pokec-relationships2 (10 millones de registros)_ y _soc-pokec-relationships3 (10.6 millones de registros)_. Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
+Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set-types.py): _soc-pokec-relationships1_ (10 millones de registros), _soc-pokec-relationships2_ (10 millones de registros) y _soc-pokec-relationships3_ (10.6 millones de registros). Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
 
 ### Implementación de la base de datos
 
@@ -145,18 +153,18 @@ Una vez que se han insertado los datos y se ha inicializado la base de datos, se
 
 **Descripción**
 
-Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. Este query usa la librería de ciencia de datos de neo4j, a continuación puede encontrar más información [neo4j.com/docs/graph-data-science](https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/common-neighbors/ 'Neo4j Site').
+Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. Este query usa la librería de ciencia de datos de neo4j, a continuación puede encontrar más información [neo4j.com/docs/graph-data-science](https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/common-neighbors/ "Neo4j Site").
 
 **Comando**
 
- ```
- MATCH (p1:Profile {userID: '16'})
- MATCH (p2:Profile {userID: '2'})
- RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS Friends_In_Common
- ```
+```
+MATCH (p1:Profile {userID: '16'})
+MATCH (p2:Profile {userID: '2'})
+RETURN gds.alpha.linkprediction.commonNeighbors(p1, p2) AS Friends_In_Common
+```
 
 **Resultados**
- 
+
 ![Consulta 1](./images/query1.png)
 
 ### Consulta 2
@@ -167,11 +175,11 @@ Obtener los atributos _userID_, _gender_ y _AGE_ de los usuarios que trabajan en
 
 **Comando**
 
- ```
- MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
- WHERE p.I_am_working_in_field = q.I_am_working_in_field
- RETURN q.userID, q.gender, q.AGE
- ```
+```
+MATCH (p:Profile {userID: '1'})-[*2..3]->(q:Profile)
+WHERE p.I_am_working_in_field = q.I_am_working_in_field
+RETURN q.userID, q.gender, q.AGE
+```
 
 **Resultados**
 
@@ -181,16 +189,16 @@ Obtener los atributos _userID_, _gender_ y _AGE_ de los usuarios que trabajan en
 
 **Descripción**
 
-Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público, tienen la misma edad, y el _userID_ se mantiene debajo de _10_. Esto último con el objetivo de minimizar el tiempo de ejecución.
+Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público, tienen la misma edad, y el _userID_ se mantiene debajo de 10. Esto último con el objetivo de minimizar el tiempo de ejecución.
 
 **Comando**
 
- ```
- MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
- WHERE n.public = '1' and n.AGE = m.AGE and toInteger(n.userID) < 10
- RETURN COUNT (*)
- ```
- 
- **Resultados**
+```
+MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
+WHERE n.public = '1' and n.AGE = m.AGE and toInteger(n.userID) < 10
+RETURN COUNT (*)
+```
+
+**Resultados**
 
 ![Consulta 3](./images/query3.png)
