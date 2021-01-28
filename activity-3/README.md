@@ -75,7 +75,7 @@ Por último, para hacer más eficiente la inserción de relaciones en la base de
    RETURN q.userID, q.gender, q.AGE
    ```
 
-3. Obtener el número de usuarios que tienen una relación de amistad mútua, su perfil es público y tienen la misma edad
+3. Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad
 
    ```
    MATCH (n:Profile)-[:FRIENDS_WITH]->(m:Profile), (n)<-[:FRIENDS_WITH]-(m)
