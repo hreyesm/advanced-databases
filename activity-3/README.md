@@ -145,7 +145,7 @@ Una vez que se han insertado los datos y se ha inicializado la base de datos, se
 
 **Descripción**
 
-Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. [HACER MÁS DESCRIPTIVO]
+Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. Este query usa la librería de ciencia de datos de neo4j, a continuación puede encontrar más información [neo4j.com/docs/graph-data-science](https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/common-neighbors/ 'Neo4j Site').
 
 **Comando**
 
@@ -181,7 +181,7 @@ Obtener los atributos _userID_, _gender_ y _AGE_ de los usuarios que trabajan en
 
 **Descripción**
 
-Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público y tienen la misma edad.
+Obtener el número de usuarios que tienen una relación de amistad mutua, su perfil es público, tienen la misma edad, y el _userID_ se mantiene debajo de _10_. Esto último con el objetivo de minimizar el tiempo de ejecución.
 
 **Comando**
 
@@ -193,4 +193,4 @@ Obtener el número de usuarios que tienen una relación de amistad mutua, su per
  
  **Resultados**
 
-![Consulta 3](./images/query-3.jpg)
+![Consulta 3](./images/query3.png)
