@@ -39,7 +39,15 @@ Pokec es la red social más popular de Eslovaquia. El dataset _soc-pokec_ contie
 
 El archivo contiene 59 columnas, separadas por una tabulación, que describen distintos atributos de los perfiles de los usuarios.
 
-A continuación se enlistan los atributos del tipo de nodo _profile_:
+#### _soc-pokec-relationships_
+
+El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro (_FRIENDS_WITH_). Por ejemplo, la fila con los atributos _start_id_ 1 y _end_id_ 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id_ 6, lo que significa que las relaciones de amistad son dirigidas.
+
+### Esquema de la base de datos
+
+<p align=center><img width="50%" src="./images/schema.png"/></p>
+
+**Atributos del nodo _Profile_**
 
 ```
 user_id: <string>
@@ -103,21 +111,6 @@ companies_brands: <string>
 more: <string>
 temp: <string>
 ```
-
-#### _soc-pokec-relationships_
-
-El archivo está compuesto por 2 columnas, separadas por una tabulación, que describen la relación de amistad que existe entre un usuario y otro (_FRIENDS_WITH_). Por ejemplo, la fila con los atributos _start_id_ 1 y _end_id_ 6 indica la relación unidireccional que el usuario con _user_id_ 1 tiene con el usuario con _user_id_ 6, lo que significa que las relaciones de amistad son dirigidas.
-
-A continuación se enlistan los atributos del tipo de relación _FRIENDS_WITH_:
-
-```
-start_id: <string>
-end_id: <string>
-```
-
-### Esquema de la base de datos
-
-<p align=center><img width="50%" src="./images/schema.png"/></p>
 
 ## Solución
 
