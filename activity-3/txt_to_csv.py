@@ -11,7 +11,7 @@
 
 import pandas as pd
 
-profiles = pd.read_csv('./data/new-soc-pokec-profiles.txt', header=None, delimiter='\t')
+profiles = pd.read_csv('./data/soc-pokec-profiles.txt', header=None, delimiter='\t')
 profiles.columns = [
     'user_id',
     'public',
