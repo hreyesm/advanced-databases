@@ -1,3 +1,14 @@
+"""
+    Actividad 3: Bases de datos de grafos
+    -------------------------------------
+    Curso: Bases de datos avanzadas
+    Profesor: Vicente Cubells Nonell
+    Equipo 5:
+        Daniela Vignau León (A01021698)
+        Cristopher Alan Cejudo Machuca (A01025468)
+        Héctor Alexis Reyes Manrique (A01339607)
+"""
+
 import pandas as pd
 
 profiles = pd.read_csv('./data/new-soc-pokec-profiles.txt', header=None, delimiter='\t')
@@ -66,5 +77,5 @@ profiles.columns = [
 
 profiles.to_csv('./data/soc-pokec-profiles.csv', index=False)
 
-#relationships = pd.read_csv ('./data/soc-pokec-relationships.txt', header=None, delimiter='\t')
-#relationships.to_csv ('./data/soc-pokec-relationships.csv', index=False)
+relationships = pd.read_csv ('./data/soc-pokec-relationships.txt', header=None, delimiter='\t')
+relationships.to_csv ('./data/soc-pokec-relationships.csv', index=False)
