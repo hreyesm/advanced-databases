@@ -17,7 +17,7 @@
 - [Solución](#solución)
   - [Preparación de archivos](#preparación-de-archivos)
   - [Implementación de la base de datos](#implementación-de-la-base-de-datos)
-  - [Ejecución de consultas](#ejecucion-de-consultas)
+  - [Ejecución de consultas](#ejecución-de-consultas)
 - [Consultas](#consultas)
   - [Consulta 1](#consulta-1)
   - [Consulta 2](#consulta-2)
