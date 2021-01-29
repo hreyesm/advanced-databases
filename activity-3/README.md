@@ -128,10 +128,11 @@ _Nota:_ Los archivos del dataset fueron almacenados dentro de una carpeta llamad
 
 1. Desde la aplicación Neo4j Desktop, crear un proyecto y una base de datos con el nombre de «Pokec».
 2. Instalar el plugin [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/) desde la aplicación, ya que es necesario para poder ejecutar la [consulta 1](#consulta-1), que involucra el algoritmo de [vecinos comunes](https://neo4j.com/docs/graph-algorithms/current/labs-algorithms/common-neighbors/).
-3. Inicializar la base de datos y acceder a Neo4j Browser.
-4. Ejectuar el primer comando del archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
-5. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la inserción de relaciones.
-6. Ejecutar los siguientes tres comandos del archivo [populate_database.cypher](./populate_database.cypher) para cargar las relaciones.
+3. Asegurarse que los archivos: _soc_pokec_profiles.csv_, _soc-pokec-relationships1.csv_, _soc-pokec-relationships2.csv_ y _soc-pokec-relationships3.csv_ se encuentren en la carpeta _Import_ de la base de datos.
+4. Inicializar la base de datos y acceder a Neo4j Browser.
+5. Ejectuar el primer comando del archivo [populate_database.cypher](./populate_database.cypher) para cargar los nodos del grafo.
+6. Ejecutar el segundo comando del archivo [populate_database.cypher](./populate_database.cypher) para crear un índice y facilitar la inserción de relaciones.
+7. Ejecutar los siguientes tres comandos del archivo [populate_database.cypher](./populate_database.cypher) para cargar las relaciones.
 
 _Nota:_ Es imporante esperar a que cada comando termine de ejecutarse para ejecutar el siguiente.
 

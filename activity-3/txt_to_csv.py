@@ -11,6 +11,7 @@
 
 import pandas as pd
 
+#Exportción a formato CSV para los nodos
 profiles = pd.read_csv('./data/soc-pokec-profiles.txt', header=None, delimiter='\t')
 profiles.columns = [
     'user_id',
@@ -77,5 +78,6 @@ profiles.columns = [
 
 profiles.to_csv('./data/soc-pokec-profiles.csv', index=False)
 
+#Exportción a formato CSV para las relaciones
 relationships = pd.read_csv ('./data/soc-pokec-relationships.txt', header=None, delimiter='\t')
 relationships.to_csv ('./data/soc-pokec-relationships.csv', index=False)
