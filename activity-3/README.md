@@ -42,8 +42,8 @@ El archivo contiene 59 columnas, separadas por una tabulación, que describen di
 A continuación se enlistan los atributos del tipo de nodo _profile_:
 
 ```
-user_id : <string>
-public : <string>
+user_id: <string>
+public: <string>
 completion_percentage: <string>
 gender: <string>
 region: <string>
