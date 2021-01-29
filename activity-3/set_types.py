@@ -1,3 +1,14 @@
+"""
+    Actividad 3: Bases de datos de grafos
+    -------------------------------------
+    Curso: Bases de datos avanzadas
+    Profesor: Vicente Cubells Nonell
+    Equipo 5:
+        Daniela Vignau León (A01021698)
+        Cristopher Alan Cejudo Machuca (A01025468)
+        Héctor Alexis Reyes Manrique (A01339607)
+"""
+
 file_name = "./data/soc-pokec-relationships.csv"
 
 with open(file_name, 'r') as fin:
