@@ -153,7 +153,7 @@ Una vez que se han insertado los datos y se ha inicializado la base de datos, se
 
 **Descripción**
 
-Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. Este query usa la librería de ciencia de datos de neo4j, a continuación puede encontrar más información [neo4j.com/docs/graph-data-science](https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/common-neighbors/ "Neo4j Site").
+Obtener el número de amigos que los usuarios con _userID_ 16 y 2 tienen en común. Esta consulta usa el algoritmo de [vecinos comunes](https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/common-neighbors/), disponible a través de la librería de ciencia de datos de Neo4j [Graph Data Science Library](https://neo4j.com/docs/graph-data-science/current/introduction/).
 
 **Comando**
 
