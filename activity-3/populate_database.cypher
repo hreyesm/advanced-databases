@@ -8,6 +8,7 @@
         Cristopher Alan Cejudo Machuca (A01025468)
         Héctor Alexis Reyes Manrique (A01339607)
 """
+
 // Importar los nodos a la base de datos
     :auto USING PERIODIC COMMIT 
     LOAD CSV WITH HEADERS FROM "file:///soc-pokec-profiles.csv" AS row
