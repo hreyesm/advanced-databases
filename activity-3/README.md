@@ -123,11 +123,13 @@ end_id: <string>
 
 ### Preparación de archivos
 
-El primer paso para resolver el problema fue preparar ambos archivos del dataset para su procesamiento. Para ello, se eliminaron las comas (,) y las comillas dobles (") de los archivos _soc-pokec-profiles_ y _soc-pokec-relationships_ cuando aún estaban en formato TXT con la ayuda del script [remove_quotes.py](remove_quotes.py). Esta preparación fue necesaria, ya que Neo4j, por un lado, requiere que la importación de datos se realice desde archivos CSV, lo que implicaría un conflicto con aquellos registros que contienen comas; y por otro lado, no facilita la inserción de registros con comillas dobles.
+El primer paso para resolver el problema fue preparar ambos archivos del dataset para su procesamiento. Para ello, se eliminaron las comas (,) y las comillas dobles (") del archivo _soc-pokec-profiles_ cuando aún estaba en formato TXT con la ayuda del script [remove_quotes.py](remove_quotes.py), el cual sobreescribe el archivo original. Esta preparación fue necesaria, ya que Neo4j, por un lado, requiere que la importación de datos se realice desde archivos CSV, lo que implicaría un conflicto con aquellos registros que contienen comas; y por otro lado, no facilita la inserción de registros con comillas dobles.
 
-Posteriormente, los archivos TXT resultantes fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea.
+Posteriormente, ambos archivos TXT fueron convertidos a formato CSV, proceso durante el cual se agregaron los atributos (_headers_) correspondientes al archivo _soc_pokec_profiles_. El script [txt_to_csv.py](./txt_to_csv.py) fue útil para llevar a cabo tal tarea. De igual manera, por practicidad, se añadieron manualmente los _headers_ al archivo _soc-pokec-relationships_. 
 
-Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set-types.py): _soc-pokec-relationships1_ (10 millones de registros), _soc-pokec-relationships2_ (10 millones de registros) y _soc-pokec-relationships3_ (10.6 millones de registros). Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher)
+Por último, para hacer más eficiente la inserción de relaciones en la base de datos, el archivo _soc-pokec-relationships_ se dividió en tres partes haciendo uso del script [set_types.py](./set_types.py): _soc-pokec-relationships1_ (10 millones de registros), _soc-pokec-relationships2_ (10 millones de registros) y _soc-pokec-relationships3_ (10.6 millones de registros). Inicialmente se consideró ejecutar el script [populate_database.py](./populate_database.py) para este propósito; sin embargo, los tiempos de inserción fueron largos. Por eso se decidió insertar los registros en partes desde la aplicación Neo4j Desktop usando los comandos que se encuentran en [populate_database.cypher](./populate_database.cypher).
+
+_Nota:_ Los archivos del dataset fueron almacenados dentro de una carpeta llamada _data_.
 
 ### Implementación de la base de datos
 
@@ -142,7 +144,7 @@ _Nota:_ Es imporante esperar a que cada comando termine de ejecutarse para ejecu
 
 ### Ejecución de consultas
 
-Una vez que se han insertado los datos y se ha inicializado la base de datos, se deberán implementar los siguientes pasos:
+Una vez que se han insertado los datos y se ha inicializado la base de datos, se deberán realizar los siguientes pasos:
 
 1. Crear un archivo `.env` y almacenar, en diferentes variables, la URL de conexión, el nombre de usuario y la contraseña necesarios para poder conectarse a la base de datos con el driver de Neo4j para Python.
 2. Ejecutar el comando `python3 main.py` para comenzar a ejecutar las consultas.
