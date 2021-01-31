@@ -34,5 +34,6 @@ def print_response(query, res):
     print("\nQuery:\n", query)
     print("Response:\n\t", res)
 
+
 if __name__ == "__main__":
     main()
